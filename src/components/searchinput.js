@@ -1,6 +1,6 @@
 import React from 'react'
 import SearchIcon from '@material-ui/icons/Search';
-
+import {Link} from "react-router-dom"
 export default function Searchinput({props}) {
 
     const handleKeypress = e => {
@@ -18,13 +18,14 @@ export default function Searchinput({props}) {
    <input onKeyPress={handleKeypress} className="searchInput">
             
             </input>
-
+<Link to="/dues">
    <div className="circle">
 
 <SearchIcon className="searchIcon" color="white"></SearchIcon>
 </div>
+</Link>
    </div>
-        
+      
         </div>
     )
 }
