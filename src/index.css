@@ -11,3 +11,83 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+.searchContainer{
+  max-height: 90vh;
+ 
+width: 100%;
+height: 100vh;
+display: flex;
+justify-content: center;
+flex-direction: column;
+align-items: center;
+background-color: #ff385c;
+position: relative !important;
+}
+.fs-lg{
+  font-size: 44px;
+}
+.mb-5{
+  margin-bottom: 30px;
+}
+.mr-4{
+  margin-right: 30px !important;
+}
+
+.wh{
+  color: white;
+}
+.bold{
+  font-weight: 600;
+}
+
+
+h1,h2,h3,h4,h5,h6,p,span{
+  font-family: 'Inter', sans-serif !important;
+}
+
+
+
+
+
+
+
+
+
+
+.searchParent{
+  width: 50%;
+  height: 70px;
+  position: relative;
+}
+.input:focus{
+  border: none;
+
+}
+
+.searchParent>input{
+  padding-left: 20px;
+font-size: 20px;
+  width: 100%;
+  height: 100%;
+  border: 1px solid white !important;
+  border-radius: 20px;
+
+}
+.searchIcon{
+  color: white;
+}
+
+.circle{
+  width: 40px;
+  height: 40px;
+  background-color: #ff385c;
+  border-radius: 20px;
+  position: absolute;
+  right: 20px;
+  top: 20px;
+  display: flex;
+  justify-content: center;
+
+align-items: center;
+text-align: center;
+}
