@@ -21,9 +21,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function ButtonAppBar() {
+export default function ButtonAppBar(props) {
+  const [state, setstate] = React.useState("")
   const classes = useStyles();
 
+
+
+const user=localStorage.getItem("user")
+console.log(user)
   return (
     <div className={classes.root}>
       <AppBar position="static" color="#ff385c">
@@ -37,9 +42,17 @@ export default function ButtonAppBar() {
           <Link to="announce"> 
           <Button color="secondary" variant="contained" className="mr-4">Announcements</Button>
           </Link>  
-        <Link to="adminlogin">
-          <Button color="inherit" >Admın Login</Button>
-          </Link>
+        {!props.user?<Link to="login">
+          <Button color="inherit" > Login</Button>
+          </Link>:
+          <Link to="login">
+           <Button color="inherit" onClick={()=>{
+            localStorage.setItem("user","")
+            props.set("")
+
+
+           }}> Logout</Button></Link>
+          }
         </Toolbar>
       </AppBar>
     </div>

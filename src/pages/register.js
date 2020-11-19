@@ -25,22 +25,22 @@ const [data, setdata] = React.useState({email:"",password:""})
 const handleSubmit=async ()=>{
 
 try {
-  let response = await axios.post("https://localhost/api/login.php", data);
-  console.log(response)
-  if(response.status==200){
-    localStorage.setItem("user","user")
-    props.set("user")
-    alert("succesfull login")
-    props.history.push("/admin")
-    }
+    let response = await axios.post("https://localhost/api/register.php", data);
+    console.log("response",response)
+  
+    if(response.status==200){
+      localStorage.setItem("user","user")
+      props.set("user")
+      alert(`${data.email} registered`)
+      
+      props.history.push("/admin")
+      }
+    
 } catch (error) {
-  alert("error")
+    alert("error")
 }
 
-
-  
-  
-
+ 
 }
 
 
@@ -61,7 +61,7 @@ const handleChange=(name,val)=>{
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Sign in
+          Register
         </Typography>
         <div className={classes.form} noValidate >
           <TextField
@@ -96,7 +96,7 @@ const handleChange=(name,val)=>{
             color="primary"
             className={classes.submit}
           >
-            login to admin
+            register to admin
           </Button>
     
         </div>

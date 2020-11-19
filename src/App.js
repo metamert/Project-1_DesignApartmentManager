@@ -1,4 +1,5 @@
 import logo from './logo.svg';
+import React from "react"
 import './App.css';
 import Navbar from "../src/components/navbar"
 import {
@@ -11,12 +12,13 @@ import Home from "./pages/home"
 import Due from "./components/Dues"
 import Login from "./pages/login"
 import Admin from "./pages/admin"
-
+import Register from "./pages/register"
 import Announce from "./pages/Announce";
 function App() {
+  const [state, setstate] = React.useState("")
   return (
     <Router>
-   <Navbar></Navbar>
+   <Navbar  user={state} set={(a)=>setstate(a)} ></Navbar>
 
       {/* A <Switch> looks through its children <Route>s and
           renders the first one that matches the current URL. */}
@@ -30,7 +32,9 @@ function App() {
         <Route path="/announce" exact component={Announce}>
       
         </Route>
-        <Route path="/adminlogin" exact component={Login}>
+        <Route path="/register" exact component={(props)=><Register user={state} set={(a)=>setstate(a)} {...props}></Register>}>
+        </Route>
+        <Route path="/login" exact component={(props)=><Login user={state} set={(a)=>setstate(a)} {...props}></Login>}>
       
       </Route>
         
