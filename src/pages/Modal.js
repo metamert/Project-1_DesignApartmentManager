@@ -52,6 +52,7 @@ console.log(selectedUser)
         onClose={handleClose}
         aria-labelledby="simple-modal-title"
         aria-describedby="simple-modal-description"
+        style={{scrollBehavior:"auto"}}
       >
       {Content}
       </Modal>

@@ -8,9 +8,17 @@ import Checkbox from "@material-ui/core/Checkbox";
 import Link from "@material-ui/core/Link";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
-
+import Radio from "@material-ui/core/Radio";
+import MenuItem from "@material-ui/core/MenuItem";
+import RadioGroup from "@material-ui/core/RadioGroup";
 import Typography from "@material-ui/core/Typography";
+import BackspaceIcon from "@material-ui/icons/Backspace";
 import { makeStyles } from "@material-ui/core/styles";
+
+import InputLabel from '@material-ui/core/InputLabel';
+
+import FormHelperText from '@material-ui/core/FormHelperText';
+import FormControl from '@material-ui/core/FormControl';
 
 import axios from "axios";
 import Select from "@material-ui/core/Select";
@@ -36,31 +44,31 @@ function getModalStyle() {
   const left = 50 + rand();
 
   return {
-    top: `40%`,
+    top: `20%`,
     left: `40%`,
     transform: `translate(-${top}%, -${left}%)`,
   };
 }
 const useStyles = makeStyles((theme) => ({
   container: {
-    marginTop: theme.spacing(8),
+   
+    marginTop: 20,
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
 
     alignSelf: "center",
     width: "100%",
-   
   },
   paper: {
-    marginTop: theme.spacing(8),
+    marginTop: 20,
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
     backgroundColor: "white",
     alignSelf: "center",
     width: "50%",
-   
+    
   },
   avatar: {
     margin: theme.spacing(1),
@@ -70,7 +78,9 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: "white",
     width: "60%", // Fix IE 11 issue.
     padding: 40,
-    marginTop: theme.spacing(1),
+    marginTop: 10,
+    position:"relative",
+    height:600
   },
   submit: {
     margin: theme.spacing(3, 0, 2),
@@ -84,67 +94,66 @@ export default function SignIn({ cancel, updatePage, create }) {
     phone_number: "",
     name: "",
     debt: "",
+    flat_status: "",
+    gender: "Male",
+    last_name:""
   });
 
-  const [error, seterror] = React.useState("")
+  const [error, seterror] = React.useState("");
   const [modalStyle] = React.useState(getModalStyle);
 
-  const check=()=>{
-    var phoneno = /^\d{10}$/
-    if(!data.phone_number){
-      return "phone number  cannot be empty"
-     }
-
-
-    if(!data.phone_number.match(phoneno)){
-      return "phone number format is not correct"
+  const check = () => {
+    var phoneno = /^\d{10}$/;
+    if (!data.phone_number) {
+      return "phone number  cannot be empty";
     }
 
-
-  
-     
-    if(!data.name){
-      return ("name cannot be empty")
-    }
-    if(!data.flat_no){
-return ("flat no cannot be empty")
-    }
-   
-
-    if(!data.debt){
-      return ("debt cannot be empty")
-
-    }
-    
-    return false
+    if (!data.phone_number.match(phoneno)) {
+      return "phone number format is not correct";
     }
 
+    if (!data.name) {
+      return "name cannot be empty";
+    }
+    if (!data.last_name) {
+      return "last name cannot be empty";
+    }
+ 
 
+    if (!data.debt) {
+      return "debt cannot be empty";
+    }
+    if (!data.flat_no) {
+      return "flat no cannot be empty";
+    }
+    if (!data.flat_status) {
+      return "flat status cannot be empty";
+    }
 
-  const Submit=async () => {
-console.log(check())
-  if(!check()){
+    return false;
+  };
 
-    try {
-      let response = await axios.post("https://localhost/api/createuser.php", data);
-      console.log(response)
-      if(response.data.status){
-       
-cancel()
-updatePage()
-
-        }else{
-          alert(response.data.message)
+  const Submit = async () => {
+    console.log(check());
+    if (!check()) {
+      try {
+        let response = await axios.post(
+          "https://localhost/api/createuser.php",
+          data
+        );
+        console.log(response);
+        if (response.data.status) {
+          cancel();
+          updatePage();
+        } else {
+          alert(response.data.message);
         }
-    } catch (error) {
-      alert("error")
+      } catch (error) {
+        alert("error");
+      }
+    } else {
+      alert(check());
     }
-   
-
-  }else{
-    alert(check())
-  }
-
   };
 
   const onChange = (name, value) => {
@@ -154,7 +163,7 @@ updatePage()
   return (
     <div className={classes.container}>
       <div className={classes.form} noValidate>
-     <h1>Create User</h1>
+        <h1>Create User</h1>
         <TextField
           variant="outlined"
           margin="normal"
@@ -167,32 +176,33 @@ updatePage()
           autoFocus
           onChange={(e) => onChange(e.target.name, e.target.value)}
         />
-        <TextField
+
+<Grid container row justify="space-between">
+      <TextField
           variant="outlined"
           margin="normal"
           required
-          fullWidth
-          name="name"
-          label="name"
-          type="name"
-          id="name"
-          autoComplete="name"
+        style={{width:"46%"}}
+        name="name"
+        label="name"
+        type="name"
+        id="name"
+        autoComplete="name"
           onChange={(e) => onChange(e.target.name, e.target.value)}
         />
-
-<TextField
+          <TextField
           variant="outlined"
           margin="normal"
           required
-          fullWidth
-          name="flat_no"
-          label="flat_no"
-          type="flat_no"
-          id="flat_no"
+          style={{width:"45%"}}
+          name="last_name"
+          label="last name"
+          type="last name"
+          id="last name"
           onChange={(e) => onChange(e.target.name, e.target.value)}
         />
-      
 
+      </Grid>
         <TextField
           variant="outlined"
           margin="normal"
@@ -202,9 +212,60 @@ updatePage()
           label="debt"
           type="debt"
           id="debt"
+          autoComplete="name"
           onChange={(e) => onChange(e.target.name, e.target.value)}
         />
-      
+
+       
+
+     
+         <FormControl variant="filled" style={{width:"100%",marginTop:20,marginBottom:10}}>
+        <InputLabel id="demo-simple-select-filled-label">Flat</InputLabel>
+        <Select
+          labelId="demo-simple-select-filled-label"
+          id="demo-simple-select-filled"
+          onChange={(e) => {onChange("flat_no",e.target.value)}}
+        >
+          <MenuItem value={"A-1"}>A-1</MenuItem>
+          <MenuItem value={"A-2"}>A-2</MenuItem>
+          <MenuItem value={"A-3"}>A-3</MenuItem>
+          <MenuItem value={"B-1"}>B-1</MenuItem>
+          <MenuItem value={"B-2"}>B-2</MenuItem>
+          <MenuItem value={"B-3"}>B-3</MenuItem>
+          <MenuItem value={"B-1"}>C-1</MenuItem>
+          <MenuItem value={"B-2"}>C-2</MenuItem>
+          <MenuItem value={"B-3"}>C-3</MenuItem>
+        </Select>
+        </FormControl>
+
+        <FormControl variant="filled" style={{width:"100%",marginTop:20,marginBottom:10}}>
+        <InputLabel id="demo-simple-select-filled-label">flat status</InputLabel>
+        <Select
+          labelId="demo-simple-select-filled-label"
+          id="demo-simple-select-filled"
+          onChange={(e) => {onChange("flat_status",e.target.value)}}
+        >
+          <MenuItem value={"Owner"}>Owner</MenuItem>
+          <MenuItem value={"Tenant"}>Tenant</MenuItem>
+          
+        </Select>
+        </FormControl>
+
+
+
+
+        <RadioGroup
+          aria-label="gender"
+          name="gender"
+          value={data.gender}
+          onChange={(e)=>{onChange("gender",e.target.value)}}
+        >
+         <Grid container row justify="space-evenly">
+           <h4 >gender:</h4>
+          <FormControlLabel value="Female" control={<Radio />} label="Female" />
+          <FormControlLabel value="Male" control={<Radio />} label="Male" />
+          </Grid>
+        </RadioGroup>
 
         <Button
           type="submit"
@@ -216,17 +277,17 @@ updatePage()
         >
           Create User
         </Button>
-        <Grid container>
-          <Grid item>
-            <Button
+     
+            <BackspaceIcon
+            className="needHover"
+            style={{position:"absolute",top:20,right:20}}
               onClick={() => cancel()}
               variant="contained"
               color="primary"
             >
-              Cancel
-            </Button>
-          </Grid>
-        </Grid>
+              
+            </BackspaceIcon>
+        
       </div>
     </div>
   );
