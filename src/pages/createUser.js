@@ -81,7 +81,7 @@ export default function SignIn({ cancel, updatePage, create }) {
   const classes = useStyles();
   const [data, set_data] = React.useState({
     flat_no: "",
-    phone_number: "user",
+    phone_number: "",
     name: "",
     debt: "",
   });
@@ -91,14 +91,17 @@ export default function SignIn({ cancel, updatePage, create }) {
 
   const check=()=>{
     var phoneno = /^\d{10}$/
+    if(!data.phone_number){
+      return "phone number  cannot be empty"
+     }
+
+
     if(!data.phone_number.match(phoneno)){
       return "phone number format is not correct"
     }
 
 
-    if(!data.phone_number){
-      return ("phone number  cannot be empty")
-     }
+  
      
     if(!data.name){
       return ("name cannot be empty")
