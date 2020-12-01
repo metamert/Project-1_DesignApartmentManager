@@ -15,8 +15,9 @@ import { connect } from "react-redux";
 import Modal from "./Modal";
 import CreateUserForm from "./createUser";
 import EditUserform from "./editUser";
+import axios from "axios";
 import { Button } from "@material-ui/core";
-import { deleteUser,createUser,editUser } from "../_actions/user_actions";
+
 const useStyles = makeStyles({
   root: {
     width: "100%",
@@ -26,74 +27,18 @@ const useStyles = makeStyles({
   },
 });
 
-function StickyHeadTable({ users, deleteUser ,create,editS}) {
+function StickyHeadTable({cur_user,history}) {
   const classes = useStyles();
   const [page, setPage] = React.useState(0);
   const [id, setid] = React.useState(0);
   const [open, setopen] = React.useState(0);
+  const [err, seterr] = React.useState("");
   const [selected, set_selected] = React.useState(0);
   const [open2, setopen2] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
   const [rows, setRows] = React.useState([]);
   const [loading, setloading] = React.useState(false);
-  const handleOpen = (id) => {
-    setid(id);
-    setopen(true);
-  };
-
-  const handleClose = () => {
-    setopen(false);
-  };
-
-  const editUser = (user) => {
-      console.log("geldi",user)
-   editS(user)
-  };
-
-  const createUser = (user) => {
-    console.log(rows);
-    console.log(user.role);
-    let arr = rows;
-    let id = Math.random(1000);
-
-create({id:id,...user})
-
-  
-    
-    
-  };
-
-  /*
-     const handleSubmit=(obj)=> {
-      
-    
-    
-        //Then cipher any text:
-      
-    
-        editUser(obj).then(
-          (response) => {
-          console.log(response)
-    
-            if (response.success) {
-              Update()
-
-              
-
-
-
-
-            } else {
-                setloading(false)
-             
-            }
-          }
-        );
-      }
-
-
-*/
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -104,8 +49,8 @@ create({id:id,...user})
     setPage(0);
   };
 
-  function createData(id, name, email, due, role, edit, del) {
-    return { id, name, email, due, role, edit, del };
+  function createData(id, name, phone_number, flat_no, debt, del) {
+    return { id, name, phone_number, flat_no, debt, del };
   }
 
   const edit = (user) => {
@@ -116,26 +61,21 @@ create({id:id,...user})
     { id: "id", label: "id", minWidth: 170 },
     { id: "name", label: "name", minWidth: 100 },
     {
-      id: "email",
-      label: "email",
+      id: "phone_number",
+      label: "phone_number",
       minWidth: 100,
     },
     {
-      id: "due",
-      label: "due",
+      id: "flat_no",
+      label: "flat_no",
       minWidth: 100,
     },
     {
-      id: "role",
-      label: "role",
+      id: "debt",
+      label: "debt",
       minWidth: 100,
     },
-    {
-      id: "edit",
-      label: "edit",
-      align: "right",
-      minWidth: 50,
-    },
+
     {
       id: "del",
       label: "delete",
@@ -145,41 +85,56 @@ create({id:id,...user})
   ];
 
   React.useEffect(() => {
+    if(!cur_user){
+history.push("/login")
+    }
     Update();
-  }, [users]);
+  }, []);
 
-  const Update = () => {
-    let arr = [];
-    setloading(true);
-    users.map((item) => {
-      console.log("ITEM ID", item[id]);
-      arr.push(
-        createData(
-          item.id,
-          item.name,
-          item.email,
-          item.due,
-          item.role,
-          <EditIcon
-            className="needHover"
-            onClick={() => edit(item)}
-          ></EditIcon>,
-          <BackspaceIcon
-            className="needHover"
-            onClick={() => deleteUser(item.id)}
-          ></BackspaceIcon>
-        )
-      );
-    });
-    console.log(users);
-    setRows(arr);
-    setTimeout(() => {
-      setloading(false);
-    }, 2000);
+  const deleteUserApi = async (id) => {
+  try {
+    console.log(id)
+    let response = await axios.post("https://localhost/api/deleteuser.php",{id:id});
+   if(response.data.status)
+   Update()
+   else alert(response.data.message)
+  
+  } catch (error) {
+    alert(error)
+  }
   };
 
-  console.log("users",users);
-  console.log("rows",rows)
+  const Update = async () => {
+    let arr = [];
+    setloading(true);
+    try {
+      let response = await axios.get("https://localhost/api/getusers.php");
+
+      console.log("resopnse", response);
+      response.data.map((item) => {
+        console.log("ITEM ID", item[id]);
+        arr.push(
+          createData(
+            item.id,
+            item.name,
+            item.phone_number,
+            item.flat_no,
+            item.debt,
+         
+
+            <BackspaceIcon
+              className="needHover"
+              onClick={() => deleteUserApi(item.id)}
+            ></BackspaceIcon>
+          )
+        );
+      });
+
+      setRows(arr);
+
+      setloading(false);
+    } catch (error) {}
+  };
 
   if (!loading)
     return (
@@ -188,7 +143,7 @@ create({id:id,...user})
           open={open}
           Content={
             <CreateUserForm
-              create={createUser}
+              
               updatePage={Update}
               cancel={() => setopen(false)}
             ></CreateUserForm>
@@ -199,7 +154,7 @@ create({id:id,...user})
           open={open2}
           Content={
             <EditUserform
-              edit={editUser}
+             
               selectedUser={selected}
               updatePage={Update}
               cancel={() => setopen2(false)}
@@ -269,11 +224,7 @@ create({id:id,...user})
     );
 }
 const mapStateToProps = (state) => ({
-  users: state.user,
+  cur_user: state.user.user,
 });
-const mapDispatchToProps = (dispatch) => ({
-  deleteUser: (id) => dispatch(deleteUser(id)),
-  create: (p) => dispatch(createUser(p)),
-  editS: (p) => dispatch(editUser(p)),
-});
-export default connect(mapStateToProps, mapDispatchToProps)(StickyHeadTable);
+
+export default connect(mapStateToProps)(StickyHeadTable);

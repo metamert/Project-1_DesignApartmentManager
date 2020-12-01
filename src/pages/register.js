@@ -28,12 +28,14 @@ try {
     let response = await axios.post("https://localhost/api/register.php", data);
     console.log("response",response)
   
-    if(response.status==200){
+    if(response.data.status){
       localStorage.setItem("user","user")
       props.set("user")
       alert(`${data.email} registered`)
       
       props.history.push("/admin")
+      }else{
+        alert("error")
       }
     
 } catch (error) {

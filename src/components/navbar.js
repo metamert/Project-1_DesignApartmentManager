@@ -7,7 +7,9 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
+import {connect} from "react-redux"
 import {Link} from "react-router-dom"
+import {deleteUser} from "../_actions/user_actions"
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -21,14 +23,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function ButtonAppBar(props) {
+ function ButtonAppBar(props) {
   const [state, setstate] = React.useState("")
   const classes = useStyles();
 
 
+console.log(props)
 
-const user=localStorage.getItem("user")
-console.log(user)
+
   return (
     <div className={classes.root}>
       <AppBar position="static" color="#ff385c">
@@ -42,13 +44,13 @@ console.log(user)
           <Link to="announce"> 
           <Button color="secondary" variant="contained" className="mr-4">Announcements</Button>
           </Link>  
-        {!props.user?<Link to="login">
-          <Button color="inherit" > Login</Button>
+        {!props.cur_user?<Link to="login">
+          <Button color="inherit" >Admin Login</Button>
           </Link>:
           <Link to="login">
            <Button color="inherit" onClick={()=>{
             localStorage.setItem("user","")
-            props.set("")
+            props.del_user("")
 
 
            }}> Logout</Button></Link>
@@ -58,3 +60,13 @@ console.log(user)
     </div>
   );
 }
+
+const stateto=(state)=>({
+cur_user:state.user.user
+})
+
+const dispatchto=(dispatch)=>({
+del_user:()=>dispatch(deleteUser())
+})
+
+export default connect(stateto,dispatchto)(ButtonAppBar)

@@ -1,25 +1,17 @@
-import { REGISTER_USER, DELETE_USER } from "./types";
-
-export function createUser(user) {
-  console.log("reducera gelen user",user)
-  return {
-    type: "create_user",
-    payload: user,
-  };
 
 
-}
-export function deleteUser(id) {
+
+export function addUser(id) {
   console.log("reducera gelen id",id)
   return {
-    type: DELETE_USER,
+    type: "add_user",
     payload: id,
   };
 }
-export function editUser(payload) {
-  console.log("helen ediy user",payload)
+export function deleteUser(payload) {
+  
   return {
-    type: "edit_user",
+    type: "delete_user",
     payload: payload,
   };
 
