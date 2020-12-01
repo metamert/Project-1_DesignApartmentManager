@@ -139,7 +139,7 @@ export default function SignIn({ cancel, updatePage, create }) {
       try {
         let response = await axios.post(
           "https://localhost/api/createuser.php",
-          data
+          {...data,createdAt:new Date.now()}
         );
         console.log(response);
         if (response.data.status) {

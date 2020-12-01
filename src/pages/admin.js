@@ -49,8 +49,8 @@ function StickyHeadTable({cur_user,history}) {
     setPage(0);
   };
 
-  function createData(id, name,last_name, phone_number,flat_status, flat_no, debt,gender, del) {
-    return { id, name,last_name, phone_number,flat_status, flat_no, debt,gender, del };
+  function createData(id,created_at ,name,last_name, phone_number,flat_status, flat_no, debt,gender, del) {
+    return { id,created_at, name,last_name, phone_number,flat_status, flat_no, debt,gender, del };
   }
 
   const edit = (user) => {
@@ -58,7 +58,8 @@ function StickyHeadTable({cur_user,history}) {
     setopen2(true);
   };
   const columns = [
-    { id: "id", label: "id", minWidth: 130 },
+    { id: "id", label: "id", minWidth: 60 },
+    { id: "created_at", label: "created at", minWidth: 60 },
     { id: "name", label: "name", minWidth: 70 },
     { id: "last_name", label: "name", minWidth: 70 },
     {
@@ -127,6 +128,7 @@ history.push("/login")
         arr.push(
           createData(
             item.id,
+            item.created_at,
             item.name,
             item.last_name,
             item.phone_number,
