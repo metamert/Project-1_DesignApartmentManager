@@ -280,7 +280,7 @@ if(!cur_user){
 
         <Button
           type="submit"
-          fullWidth
+        style={{marginRight:20}}
           variant="contained"
           color="primary"
           className={classes.submit}
@@ -288,16 +288,18 @@ if(!cur_user){
         >
           Add User
         </Button>
+        <Button
+          type="submit"
+         
+          variant="contained"
+          color="primary"
+          className={classes.submit}
+          onClick={() => history.push("/admin")}
+        >
+         Cancel
+        </Button>
      
-            <BackspaceIcon
-            className="needHover"
-            style={{position:"absolute",top:20,right:20}}
-              onClick={() => history.push("/admin")}
-              variant="contained"
-              color="primary"
-            >
-              
-            </BackspaceIcon>
+           
         
       </div>
     </div>
