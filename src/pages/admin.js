@@ -59,7 +59,7 @@ function StickyHeadTable({cur_user,history}) {
   };
   const columns = [
     { id: "id", label: "id", minWidth: 60 },
-    { id: "created_at", label: "created at", minWidth: 60 },
+    { id: "created_at", label: "date", minWidth: 60 },
     { id: "name", label: "name", minWidth: 70 },
     { id: "last_name", label: "name", minWidth: 70 },
     {
@@ -139,10 +139,10 @@ history.push("/login")
            
          
 
-            <BackspaceIcon
+            <p
               className="needHover"
               onClick={() => deleteUserApi(item.id)}
-            ></BackspaceIcon>
+            >delete</p>
           )
         );
       });
@@ -213,15 +213,7 @@ history.push("/login")
             </TableBody>
           </Table>
         </TableContainer>
-        <TablePagination
-          rowsPerPageOptions={[10, 25, 100]}
-          component="div"
-          count={rows.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onChangePage={handleChangePage}
-          onChangeRowsPerPage={handleChangeRowsPerPage}
-        />
+      
       </Paper>
     );
   else

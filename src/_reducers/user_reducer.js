@@ -1,6 +1,6 @@
 import { REGISTER_USER, EDIT_USER, DELETE_USER } from "../_actions/types";
-
-const intialState = {user:""}
+let us= localStorage.getItem("user", "user")
+const intialState = {user:us}
 
 const del = (state, id) => {
   console.log("STATE", state);
