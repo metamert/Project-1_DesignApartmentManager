@@ -13,7 +13,7 @@ import BackspaceIcon from "@material-ui/icons/Backspace";
 import { CircularProgress } from "@material-ui/core";
 import { connect } from "react-redux";
 import Modal from "./Modal";
-import CreateUserForm from "./createUser";
+
 import EditUserform from "./editUser";
 import axios from "axios";
 import { Button } from "@material-ui/core";
@@ -156,16 +156,7 @@ history.push("/login")
   if (!loading)
     return (
       <Paper className={classes.root}>
-        <Modal
-          open={open}
-          Content={
-            <CreateUserForm
-              
-              updatePage={Update}
-              cancel={() => setopen(false)}
-            ></CreateUserForm>
-          }
-        ></Modal>
+     
         <Modal
           selectedUser={selected}
           open={open2}
@@ -179,11 +170,11 @@ history.push("/login")
           }
         ></Modal>
         <Button
-          onClick={() => setopen(true)}
+          onClick={() => history.push("/admin-adduser")}
           variant="contained"
           color="primary"
         >
-          Create User
+          Add User
         </Button>
         <TableContainer className={classes.container}>
           <Table stickyHeader aria-label="sticky table">

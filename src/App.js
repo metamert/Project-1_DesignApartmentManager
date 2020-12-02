@@ -2,6 +2,7 @@ import logo from './logo.svg';
 import React from "react"
 import './App.css';
 import Navbar from "../src/components/navbar"
+import AddUser from "./pages/addUser"
 import {
   BrowserRouter as Router,
   Switch,
@@ -41,8 +42,10 @@ function App() {
         <Route path="/notfound" exact>
           </Route>
         <Route path="/admin" exact component={Admin}>
+     
           
         </Route>
+        <Route path="/admin-adduser" exact component={(props)=><AddUser user={state} set={(a)=>setstate(a)} {...props}></AddUser>}/>
       </Switch>
    
   </Router>

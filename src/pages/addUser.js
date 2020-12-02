@@ -19,7 +19,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 
 import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
-
+import {connect} from "react-redux"
 import axios from "axios";
 import Select from "@material-ui/core/Select";
 
@@ -87,7 +87,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function SignIn({ cancel, updatePage, create }) {
+ function AddUser({ cancel, updatePage, create,history ,cur_user}) {
   const classes = useStyles();
   const [data, set_data] = React.useState({
     flat_no: "",
@@ -101,6 +101,16 @@ export default function SignIn({ cancel, updatePage, create }) {
 
   const [error, seterror] = React.useState("");
   const [modalStyle] = React.useState(getModalStyle);
+
+
+React.useEffect(() => {
+  
+if(!cur_user){
+  history.push("/login")
+}
+
+}, [])
+
 
   const check = () => {
     var phoneno = /^\d{10}$/;
@@ -138,13 +148,13 @@ export default function SignIn({ cancel, updatePage, create }) {
     if (!check()) {
       try {
         let response = await axios.post(
-          "https://localhost/api/createuser.php",
-          {...data,createdAt:new Date.now()}
+          "https://localhost/api/adduser.php",
+          data
         );
         console.log(response);
         if (response.data.status) {
-          cancel();
-          updatePage();
+          history.push("/admin")
+          
         } else {
           alert(response.data.message);
         }
@@ -163,7 +173,7 @@ export default function SignIn({ cancel, updatePage, create }) {
   return (
     <div className={classes.container}>
       <div className={classes.form} noValidate>
-        <h1>Create User</h1>
+        <h1>Add User</h1>
         <TextField
           variant="outlined"
           margin="normal"
@@ -275,13 +285,13 @@ export default function SignIn({ cancel, updatePage, create }) {
           className={classes.submit}
           onClick={Submit}
         >
-          Create User
+          Add User
         </Button>
      
             <BackspaceIcon
             className="needHover"
             style={{position:"absolute",top:20,right:20}}
-              onClick={() => cancel()}
+              onClick={() => history.push("/admin")}
               variant="contained"
               color="primary"
             >
@@ -292,3 +302,10 @@ export default function SignIn({ cancel, updatePage, create }) {
     </div>
   );
 }
+
+
+const mapStateToProps = (state) => ({
+  cur_user: state.user.user,
+});
+
+export default connect(mapStateToProps)(AddUser);
