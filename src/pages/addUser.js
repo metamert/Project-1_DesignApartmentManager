@@ -200,7 +200,10 @@ if(!cur_user){
         autoComplete="name"
           onChange={(e) => onChange(e.target.name, e.target.value)}
         />
-          <TextField
+       
+
+      </Grid>
+      <TextField
           variant="outlined"
           margin="normal"
           required
@@ -211,8 +214,6 @@ if(!cur_user){
           id="last name"
           onChange={(e) => onChange(e.target.name, e.target.value)}
         />
-
-      </Grid>
         <TextField
           variant="outlined"
           margin="normal"
