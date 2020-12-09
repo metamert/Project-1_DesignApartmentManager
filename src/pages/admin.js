@@ -234,9 +234,7 @@ function StickyHeadTable({ cur_user, history }) {
     );
   else
     return (
-      <CircularProgress
-        style={{ position: "absolute", left: "50%" }}
-      ></CircularProgress>
+     <h2>Data base bağlı değil ! bu sayfa sadece statik  </h2>
     );
 }
 const mapStateToProps = (state) => ({
