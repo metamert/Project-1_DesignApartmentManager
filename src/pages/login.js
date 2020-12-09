@@ -23,7 +23,8 @@ function SignIn(props) {
 
   const handleSubmit = async () => {
     if (data.email && data.password) {
-      try {
+   /**
+    *    try {
         let response = await axios.post(
           "https://localhost/api/login.php",
           data
@@ -41,6 +42,15 @@ function SignIn(props) {
       } catch (error) {
         alert("error");
       }
+    * 
+    */
+
+   localStorage.setItem("user", "user");
+   props.set("user");
+   props.adduser()
+   alert("succesfull login");
+   props.history.push("/admin");
+
     } else {
       if (!data.email) {
         alert("email can not be empty");

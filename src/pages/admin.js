@@ -27,7 +27,7 @@ const useStyles = makeStyles({
   },
 });
 
-function StickyHeadTable({cur_user,history}) {
+function StickyHeadTable({ cur_user, history }) {
   const classes = useStyles();
   const [page, setPage] = React.useState(0);
   const [id, setid] = React.useState(0);
@@ -49,8 +49,30 @@ function StickyHeadTable({cur_user,history}) {
     setPage(0);
   };
 
-  function createData(id,created_at ,name,last_name, phone_number,flat_status, flat_no, debt,gender, del) {
-    return { id,created_at, name,last_name, phone_number,flat_status, flat_no, debt,gender, del };
+  function createData(
+    id,
+    created_at,
+    name,
+    last_name,
+    phone_number,
+    flat_status,
+    flat_no,
+    debt,
+    gender,
+    del
+  ) {
+    return {
+      id,
+      created_at,
+      name,
+      last_name,
+      phone_number,
+      flat_status,
+      flat_no,
+      debt,
+      gender,
+      del,
+    };
   }
 
   const edit = (user) => {
@@ -97,23 +119,23 @@ function StickyHeadTable({cur_user,history}) {
   ];
 
   React.useEffect(() => {
-    if(!cur_user){
-history.push("/login")
+    if (!cur_user) {
+      history.push("/login");
     }
     Update();
   }, []);
 
   const deleteUserApi = async (id) => {
-  try {
-    console.log(id)
-    let response = await axios.post("https://localhost/api/deleteuser.php",{id:id});
-   if(response.data.status)
-   Update()
-   else alert(response.data.message)
-  
-  } catch (error) {
-    alert(error)
-  }
+    try {
+      console.log(id);
+      let response = await axios.post("https://localhost/api/deleteuser.php", {
+        id: id,
+      });
+      if (response.data.status) Update();
+      else alert(response.data.message);
+    } catch (error) {
+      alert(error);
+    }
   };
 
   const Update = async () => {
@@ -136,13 +158,10 @@ history.push("/login")
             item.flat_no,
             item.debt,
             item.gender,
-           
-         
 
-            <p
-              className="needHover"
-              onClick={() => deleteUserApi(item.id)}
-            >delete</p>
+            <BackspaceIcon className="needHover" onClick={() => deleteUserApi(item.id)}>
+             
+            </BackspaceIcon>
           )
         );
       });
@@ -156,13 +175,11 @@ history.push("/login")
   if (!loading)
     return (
       <Paper className={classes.root}>
-     
         <Modal
           selectedUser={selected}
           open={open2}
           Content={
             <EditUserform
-             
               selectedUser={selected}
               updatePage={Update}
               cancel={() => setopen2(false)}
@@ -213,7 +230,6 @@ history.push("/login")
             </TableBody>
           </Table>
         </TableContainer>
-      
       </Paper>
     );
   else
