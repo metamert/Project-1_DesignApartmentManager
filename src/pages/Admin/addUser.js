@@ -22,7 +22,6 @@ import FormHelperText from "@material-ui/core/FormHelperText";
 import FormControl from "@material-ui/core/FormControl";
 import { connect } from "react-redux";
 import axios from "axios";
-import { ToastContainer, toast } from 'react-toastify';
 import Select from "@material-ui/core/Select";
 
 function Copyright() {
@@ -105,7 +104,7 @@ function AddUser({ cancel, updatePage, create, history, cur_user }) {
   const [modalStyle] = React.useState(getModalStyle);
 
   React.useEffect(() => {
-    if (cur_user) {
+    if (!cur_user) {
       history.push("/login");
     }
   }, []);
@@ -141,33 +140,21 @@ function AddUser({ cancel, updatePage, create, history, cur_user }) {
     console.log(check());
     if (!check()) {
       try {
-        const body = data;
-        const response = await fetch(
+        let response = await axios.post(
           "http://localhost:5000/authentication/register",
-          {
-            method: "POST",
-            headers: {
-              "Content-type": "application/json"
-            },
-            body: JSON.stringify(body)
-          }
+          data
         );
-        const parseRes = await response.json();
-     
-  
-        if ( parseRes.newUser) {
-          localStorage.setItem("token", parseRes.jwtToken);
-         
-          toast.success("Register Successfully");
+        console.log(response);
+        if (response.data.status) {
+          history.push("/admin");
         } else {
-         
-          toast.error(parseRes);
+          alert(response.data.message);
         }
-      } catch (err) {
-        console.error(err.message);
+      } catch (error) {
+        alert("error");
       }
     } else {
-      toast.error(check());
+      alert(check());
     }
   };
 
@@ -183,12 +170,12 @@ function AddUser({ cancel, updatePage, create, history, cur_user }) {
           color="primary"
           className="back needHover"
        
-          onClick={() => history.push("/login")}
+          onClick={() => history.push("/admin")}
         >
         
         </ArrowBackIosIcon>
       <div className="form-responsive" noValidate>
-        <h1>Register</h1>
+        <h1>Add User</h1>
         <TextField
           variant="outlined"
           margin="normal"
@@ -328,7 +315,7 @@ function AddUser({ cancel, updatePage, create, history, cur_user }) {
           className={classes.submit}
           onClick={Submit}
         >
-          Sign up 
+          Add User
         </Button>
        
       </div>

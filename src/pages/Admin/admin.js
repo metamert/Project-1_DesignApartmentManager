@@ -12,7 +12,7 @@ import EditIcon from "@material-ui/icons/Edit";
 import BackspaceIcon from "@material-ui/icons/Backspace";
 import { CircularProgress } from "@material-ui/core";
 import { connect } from "react-redux";
-import Modal from "./Modal";
+import Modal from "../Modal";
 
 import EditUserform from "./editUser";
 import axios from "axios";
@@ -172,7 +172,7 @@ function StickyHeadTable({ cur_user, history }) {
     } catch (error) {}
   };
 
-  if (!loading)
+  if (loading)
     return (
       <Paper className={classes.root}>
         <Modal

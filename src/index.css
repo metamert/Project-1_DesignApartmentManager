@@ -11,6 +11,18 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.form-responsive{
+background-color: white;
+ 
+ 
+  padding: 20px;
+  
+  position: "relative",
+  
+ 
+}
+
 .searchContainer{
   max-height: 90vh;
  
@@ -90,4 +102,36 @@ font-size: 20px;
 
 align-items: center;
 text-align: center;
+}
+
+
+@media only screen and (max-width: 900px) {
+  .form-responsive {
+    width: 85%;
+  }
+
+.back{
+font-size: 40px !important;
+position: absolute;
+left: 10%;
+top: 80px;
+
+}
+
+}
+
+
+@media only screen and (min-width: 900px) {
+  .form-responsive {
+    width: 60%;
+  }
+
+  .back{
+    font-size: 60px !important;
+    position: absolute;
+    left: 10%;
+    top: 100px;
+    
+    }
+
 }
