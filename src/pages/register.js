@@ -24,6 +24,7 @@ import { connect } from "react-redux";
 import axios from "axios";
 import { ToastContainer, toast } from 'react-toastify';
 import Select from "@material-ui/core/Select";
+import {setCurrentUser} from "../redux/user/user.actions"
 
 function Copyright() {
   return (
@@ -87,7 +88,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function AddUser({ cancel, updatePage, create, history, cur_user }) {
+function AddUser({ cancel, updatePage, create, history, cur_user,add_user }) {
   const classes = useStyles();
   const [data, set_data] = React.useState({
     phone_number: "",
@@ -155,16 +156,22 @@ function AddUser({ cancel, updatePage, create, history, cur_user }) {
         const parseRes = await response.json();
      
   
-        if ( parseRes.newUser) {
+        if ( parseRes.status) {
           localStorage.setItem("token", parseRes.jwtToken);
-         
+         console.log(parseRes)
+
+
+
+add_user(parseRes)
+
           toast.success("Register Successfully");
         } else {
          
           toast.error(parseRes);
         }
       } catch (err) {
-        console.error(err.message);
+      
+        toast.error("enter different phone number");
       }
     } else {
       toast.error(check());
@@ -340,4 +347,8 @@ const mapStateToProps = (state) => ({
   cur_user: state.user.user,
 });
 
-export default connect(mapStateToProps)(AddUser);
+const mapDispatchToState=(dispatch)=>({
+add_user:(payload)=> dispatch(setCurrentUser(payload))
+})
+
+export default connect(mapStateToProps,mapDispatchToState)(AddUser);

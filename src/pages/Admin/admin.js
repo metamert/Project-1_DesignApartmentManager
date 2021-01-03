@@ -9,11 +9,14 @@ import TableHead from "@material-ui/core/TableHead";
 import TablePagination from "@material-ui/core/TablePagination";
 import TableRow from "@material-ui/core/TableRow";
 import EditIcon from "@material-ui/icons/Edit";
+import { ToastContainer, toast } from 'react-toastify';
 import BackspaceIcon from "@material-ui/icons/Backspace";
 import { CircularProgress } from "@material-ui/core";
 import { connect } from "react-redux";
 import Modal from "../Modal";
+import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
 
+import CancelIcon from '@material-ui/icons/Cancel';
 import EditUserform from "./editUser";
 import axios from "axios";
 import { Button } from "@material-ui/core";
@@ -27,12 +30,11 @@ const useStyles = makeStyles({
   },
 });
 
-function StickyHeadTable({ cur_user, history }) {
+function StickyHeadTable({ admin, history }) {
   const classes = useStyles();
   const [page, setPage] = React.useState(0);
   const [id, setid] = React.useState(0);
-  const [open, setopen] = React.useState(0);
-  const [err, seterr] = React.useState("");
+ 
   const [selected, set_selected] = React.useState(0);
   const [open2, setopen2] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
@@ -50,49 +52,59 @@ function StickyHeadTable({ cur_user, history }) {
   };
 
   function createData(
-    id,
-    created_at,
-    name,
-    last_name,
-    phone_number,
-    flat_status,
-    flat_no,
-    debt,
-    gender,
-    del
+   
+  user_id,
+  created_at,
+  user_name,
+  user_email,
+  phone_number,
+  flat_status,
+  flat_no,
+  swimming_pool,
+  fitness,
+  is_active,
+  moved_at,
+  edit,
+  del
   ) {
     return {
-      id,
-      created_at,
-      name,
-      last_name,
-      phone_number,
-      flat_status,
-      flat_no,
-      debt,
-      gender,
-      del,
+      
+  user_id,
+  created_at,
+  user_name,
+  user_email,
+  phone_number,
+  flat_status,
+  flat_no,
+  swimming_pool,
+  fitness,
+  is_active,
+  moved_at,
+  edit,
+  del
     };
   }
 
-  const edit = (user) => {
-    set_selected(user);
-    setopen2(true);
-  };
+ 
+
+
+
+
+
   const columns = [
-    { id: "id", label: "id", minWidth: 60 },
+    { id: "user_id", label: "id", minWidth: 30 },
     { id: "created_at", label: "date", minWidth: 60 },
-    { id: "name", label: "name", minWidth: 70 },
-    { id: "last_name", label: "name", minWidth: 70 },
+    { id: "user_name", label: "name", minWidth: 70 },
+    { id: "user_email", label: "email", minWidth: 70 },
     {
       id: "phone_number",
       label: "phone_number",
-      minWidth: 100,
+      minWidth: 50,
     },
     {
       id: "flat_status",
       label: "flat_status",
-      minWidth: 100,
+      minWidth: 50,
     },
     {
       id: "flat_no",
@@ -100,16 +112,31 @@ function StickyHeadTable({ cur_user, history }) {
       minWidth: 50,
     },
     {
-      id: "debt",
-      label: "debt",
-      minWidth: 100,
+      id: "swimming_pool",
+      label: "swimming",
+      minWidth: 50,
     },
     {
-      id: "gender",
-      label: "gender",
+      id: "fitness",
+      label: "fitness service",
+      minWidth: 50,
+    },
+    {
+      id: "is_active",
+      label: "active",
+      minWidth: 50,
+    },
+    {
+      id: "moved_at",
+      label: "moved at",
       minWidth: 70,
     },
-
+    {
+      id: "edit",
+      label: "update",
+      minWidth: 50,
+      align: "right",
+    },
     {
       id: "del",
       label: "delete",
@@ -119,47 +146,103 @@ function StickyHeadTable({ cur_user, history }) {
   ];
 
   React.useEffect(() => {
-    if (!cur_user) {
-      history.push("/login");
-    }
+  
     Update();
   }, []);
+
+
+  function getFormattedDate(date) {
+    var year = date.getFullYear();
+  
+    var month = (1 + date.getMonth()).toString();
+    month = month.length > 1 ? month : '0' + month;
+  
+    var day = date.getDate().toString();
+    day = day.length > 1 ? day : '0' + day;
+    
+    return month + '/' + day + '/' + year;
+  }
 
   const deleteUserApi = async (id) => {
     try {
       console.log(id);
-      let response = await axios.post("https://localhost/api/deleteuser.php", {
-        id: id,
+      let response = await axios.delete(`http://localhost:5000/admin/delete-user/${id}`, {
+        method: "DELETE",
+        headers: { jwt_token: admin.token }
       });
-      if (response.data.status) Update();
-      else alert(response.data.message);
+      console.log(response)
+      if (response.status) Update();
+      else toast.success(response.data.message);
     } catch (error) {
-      alert(error);
+      toast.error(error);
     }
   };
+
+  const edit = async (data) => {
+    try {
+     
+
+      const myHeaders = new Headers();
+
+      myHeaders.append("Content-Type", "application/json");
+      myHeaders.append("jwt_token", admin.token);
+
+      await fetch(`http://localhost:5000/admin/update-user/${data.user_id}`, {
+        method: "PUT",
+        headers: myHeaders,
+        body: JSON.stringify(data)
+      });
+
+   await Update()
+
+      // window.location = "/";
+    } catch (err) {
+      console.error(err.message);
+    }
+  };
+
+  const updateUser = async (user) => {
+    set_selected(user);
+    setopen2(true);
+  };
+
+
+  console.log("token",admin.token)
 
   const Update = async () => {
     let arr = [];
     setloading(true);
     try {
-      let response = await axios.get("https://localhost/api/getusers.php");
+      const res = await fetch("http://localhost:5000/admin/", {
+        method: "GET",
+        headers: { jwt_token: admin.token }
+      });
 
-      console.log("resopnse", response);
-      response.data.map((item) => {
-        console.log("ITEM ID", item[id]);
+      const parseRes = await res.json();
+
+
+
+
+      console.log("resopnse", parseRes);
+    parseRes.map((item) => {
+        console.log(  "gi", item.swimming_pool)
         arr.push(
           createData(
-            item.id,
-            item.created_at,
-            item.name,
-            item.last_name,
+            item.user_id,
+           getFormattedDate(new Date(item.created_at)),
+            item.user_name,
+            item.user_email,
             item.phone_number,
             item.flat_status,
             item.flat_no,
-            item.debt,
-            item.gender,
+          item.swimming_pool?<CheckCircleOutlineIcon  style={{color:"green"}}/>:<CancelIcon color="secondary"/>,
+            item.fitness?<CheckCircleOutlineIcon  style={{color:"green"}}/>:<CancelIcon color="secondary"/>,
+            item.is_active?<CheckCircleOutlineIcon  style={{color:"green"}}/>:<CancelIcon color="secondary"/>,
+            item.moved_at?getFormattedDate(new Date(item.moved_at)):"not moved yet",
+            
+<EditIcon className="needHover" onClick={()=>updateUser(item)}/>,
 
-            <BackspaceIcon className="needHover" onClick={() => deleteUserApi(item.id)}>
+            <BackspaceIcon className="needHover" onClick={() => deleteUserApi(item.user_id)}>
              
             </BackspaceIcon>
           )
@@ -169,10 +252,26 @@ function StickyHeadTable({ cur_user, history }) {
       setRows(arr);
 
       setloading(false);
-    } catch (error) {}
+
+
+
+
+
+
+
+
+    } catch (err) {
+      console.error(err.message);
+    }
+
+    
   };
 
-  if (loading)
+
+
+
+
+  if (!loading)
     return (
       <Paper className={classes.root}>
         <Modal
@@ -183,16 +282,11 @@ function StickyHeadTable({ cur_user, history }) {
               selectedUser={selected}
               updatePage={Update}
               cancel={() => setopen2(false)}
+              edit={edit}
             />
           }
         ></Modal>
-        <Button
-          onClick={() => history.push("/admin-adduser")}
-          variant="contained"
-          color="primary"
-        >
-          Add User
-        </Button>
+        
         <TableContainer className={classes.container}>
           <Table stickyHeader aria-label="sticky table">
             <TableHead>
@@ -228,17 +322,27 @@ function StickyHeadTable({ cur_user, history }) {
                   );
                 })}
             </TableBody>
+            
           </Table>
         </TableContainer>
+        <TablePagination
+        rowsPerPageOptions={[10, 25, 100]}
+        component="div"
+        count={rows.length}
+        rowsPerPage={rowsPerPage}
+        page={page}
+        onChangePage={handleChangePage}
+        onChangeRowsPerPage={handleChangeRowsPerPage}
+      />
       </Paper>
     );
   else
     return (
-     <h2>Data base bağlı değil ! bu sayfa sadece statik  </h2>
+     <CircularProgress></CircularProgress>
     );
 }
 const mapStateToProps = (state) => ({
-  cur_user: state.user.user,
+  admin: state.user.admin,
 });
 
 export default connect(mapStateToProps)(StickyHeadTable);

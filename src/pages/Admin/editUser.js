@@ -1,19 +1,28 @@
-import React from 'react';
-import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import Link from '@material-ui/core/Link';
-import Grid from '@material-ui/core/Grid';
-import Box from '@material-ui/core/Box';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
-import {Paper} from "@material-ui/core"
-import Select from '@material-ui/core/Select';
+import React from "react";
+import Avatar from "@material-ui/core/Avatar";
+import Button from "@material-ui/core/Button";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import TextField from "@material-ui/core/TextField";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Checkbox from "@material-ui/core/Checkbox";
+import Link from "@material-ui/core/Link";
+import Grid from "@material-ui/core/Grid";
+
+import Radio from "@material-ui/core/Radio";
+import MenuItem from "@material-ui/core/MenuItem";
+import RadioGroup from "@material-ui/core/RadioGroup";
+import Typography from "@material-ui/core/Typography";
+import BackspaceIcon from "@material-ui/icons/Backspace";
+import { makeStyles } from "@material-ui/core/styles";
+import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
+import InputLabel from "@material-ui/core/InputLabel";
+
+import FormControl from "@material-ui/core/FormControl";
+import { connect } from "react-redux";
+
+import { ToastContainer, toast } from 'react-toastify';
+import Select from "@material-ui/core/Select";
+import {setCurrentUser} from "../../redux/user/user.actions"
 
 
 function Copyright() {
@@ -33,8 +42,8 @@ function rand() {
   }
   
   function getModalStyle() {
-    const top = 50 + rand();
-    const left = 50 + rand();
+    const top = 20;
+    const left = 20 ;
   
     return {
       top: `${top}%`,
@@ -44,14 +53,14 @@ function rand() {
   }
 const useStyles = makeStyles((theme) => ({
     container: {
-        marginTop: theme.spacing(8),
+       
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-      
+      marginTop:20,
         alignSelf:"center",
         width:"100%",
-        padding:100
+        padding:20
       },
   paper: {
     marginTop: theme.spacing(8),
@@ -81,7 +90,20 @@ const useStyles = makeStyles((theme) => ({
 export default function SignIn({cancel,updatePage,selectedUser,edit}) {
   const classes = useStyles();
   const [data,set_data]=React.useState(
-    {"password":"","user_role":"user_a","email":"","name":""}
+    {
+      user_id:"",
+      created_at:"",
+      user_name:"",
+      user_email:"",
+      phone_number:"",
+      flat_status:"",
+      flat_no:"",
+      swimming_pool:"",
+      fitness:"",
+      is_active:"",
+      moved_at:"",
+
+    }
 
 
   )
@@ -110,60 +132,130 @@ set_data(selectedUser)
  
 <div    className={classes.container}>
         <div className={classes.form} noValidate>
+        <TextField
+          variant="outlined"
+          margin="normal"
+          required
+          fullWidth
+          value={data.phone_number}
+          id="phone_number"
+          label="phone_number "
+          name="phone_number"
+          autoComplete="phone_number"
+          autoFocus
+          onChange={(e) => onChange(e.target.name, e.target.value)}
+        />
+
+        <Grid container row justify="space-between">
           <TextField
             variant="outlined"
             margin="normal"
             required
-            fullWidth
-            id="email"
-            label="Email Address"
-            name="email"
-            value={data["email"]}
-            autoComplete="email"
-            autoFocus
-            onChange={(e)=>onChange(e.target.name,e.target.value)}
-          />
-           <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            name="name"
-            value={data["name"]}
+            style={{ width: "46%" }}
+            name="user_name"
+            value={
+              data.user_name
+            }
             label="name"
             type="name"
             id="name"
             autoComplete="name"
-            onChange={(e)=>onChange(e.target.name,e.target.value)}
+            onChange={(e) => onChange(e.target.name, e.target.value)}
           />
           <TextField
             variant="outlined"
             margin="normal"
             required
-            fullWidth
-            value={data["due"]}
-            name="due"
-            label="due"
-            type="due"
-            id="due"
-           
-            onChange={(e)=>onChange(e.target.name,e.target.value)}
+            value={
+              data.user_email
+            }
+
+            style={{ width: "45%" }}
+            name="user_email"
+            label="email"
+            type="email"
+            id="email"
+            onChange={(e) => onChange(e.target.name, e.target.value)}
           />
-            <Select
-          native
-          style={{width:"100%",marginTop:30,marginBottom:20}}
-          value={data.user_role}
-          onChange={(e)=>onChange("user_role",e.target.value)}
-          inputProps={{
-            name: 'user_role',
-            id: 'filled-age-native-simple',
+        </Grid>
+
+       
+
+        <FormControl
+          variant="filled"
+          style={{ width: "100%", marginTop: 20, marginBottom: 10 }}
+        >
+          <InputLabel id="demo-simple-select-filled-label">Flat</InputLabel>
+          <Select
+           value={
+            data.flat_no
+          }
+            labelId="demo-simple-select-filled-label"
+            id="demo-simple-select-filled"
+            onChange={(e) => {
+              onChange("flat_no", e.target.value);
+            }}
+          >
+            <MenuItem value={"A-1"}>A-1</MenuItem>
+            <MenuItem value={"A-2"}>A-2</MenuItem>
+            <MenuItem value={"A-3"}>A-3</MenuItem>
+            <MenuItem value={"B-1"}>B-1</MenuItem>
+            <MenuItem value={"B-2"}>B-2</MenuItem>
+            <MenuItem value={"B-3"}>B-3</MenuItem>
+            <MenuItem value={"C-1"}>C-1</MenuItem>
+            <MenuItem value={"C-2"}>C-2</MenuItem>
+            <MenuItem value={"C-3"}>C-3</MenuItem>
+          </Select>
+        </FormControl>
+
+        <RadioGroup
+          aria-label="gender"
+          name="flat_status"
+          value={data.flat_status}
+          onChange={(e) => {
+            onChange("flat_status", e.target.value);
           }}
         >
+          <Grid container row justify="space-evenly">
+            <h4>Flat Status</h4>
+            <FormControlLabel value="Owner" control={<Radio />} label="Owner" />
+            <FormControlLabel
+              value="Tenant"
+              control={<Radio />}
+              label="Tenant"
+            />
+          </Grid>
+        </RadioGroup>
+
+
+        <Grid container row justify="space-evenly">
+        <h4>Exstra Services</h4>
+       
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={data.fitness}
+                  onChange={(e) => {
+                    onChange("fitness", e.target.checked);
+                  }}
+                  inputProps={{ "aria-label": "primary checkbox" }}
+                />
+              }
+              label="Fitness service"
+            />
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={data.swimming_pool}
+                  onChange={(e) => {
+                    onChange("swimming_pool", e.target.checked);
+                  }}
+                  inputProps={{ "aria-label": "primary checkbox" }}
+                />
+              }
+              label="Swimming pool"
+            />
         
-          <option value={"user_a"}>type A</option>
-          <option value={"user_b"}>type B</option>
-          <option value={"admin"}>Admin</option>
-        </Select>
        
           <Button
             type="submit"
@@ -175,6 +267,7 @@ set_data(selectedUser)
           >
           Save 
           </Button>
+          </Grid>
           <Grid container>
             
             <Grid item>

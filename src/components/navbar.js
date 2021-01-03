@@ -9,7 +9,7 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import {connect} from "react-redux"
 import {Link} from "react-router-dom"
-import {deleteUser} from "../_actions/user_actions"
+import {setCurrentUser,setAdmin} from "../redux/user/user.actions"
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -44,13 +44,13 @@ console.log(props)
           <Link to="announce"> 
           <Button color="secondary" variant="contained" className="mr-4">Announcements</Button>
           </Link>  
-        {!props.cur_user?<Link to="login">
-          <Button color="inherit" >Admin Login</Button>
+        {!props.admin?<Link to="/admin-login">
+          <Button color="inherit" >Login</Button>
           </Link>:
           <Link to="login">
            <Button color="inherit" onClick={()=>{
-            localStorage.setItem("user","")
-            props.del_user("")
+           props.del_user(null)
+           
 
 
            }}> Logout</Button></Link>
@@ -62,11 +62,12 @@ console.log(props)
 }
 
 const stateto=(state)=>({
-cur_user:state.user.user
+cur_user:state.user.currentUser,
+admin:state.user.admin
 })
 
 const dispatchto=(dispatch)=>({
-del_user:()=>dispatch(deleteUser())
+del_user:()=>dispatch(setAdmin(null))
 })
 
 export default connect(stateto,dispatchto)(ButtonAppBar)

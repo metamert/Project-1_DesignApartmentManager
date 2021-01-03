@@ -15,7 +15,8 @@ import Due from "./components/Dues"
 import AdminLogin from "./pages/Admin/adminLogin"
 import Login from "./pages/login"
 import AdminAddUser from "./pages/Admin/addUser"
-import Admin from "./pages/Admin/admin"
+import Admin from "./pages/Admin/adminDashboard"
+
 import Register from "./pages/register"
 import { ToastContainer, toast } from 'react-toastify';
 import Announce from "./pages/Announce";
@@ -25,7 +26,7 @@ function App({user,admin}) {
   console.log(user)
   return (
     <Router>
-   <Navbar  user={state} set={(a)=>setstate(a)} ></Navbar>
+   <Navbar   ></Navbar>
   
 
       {/* A <Switch> looks through its children <Route>s and
@@ -51,28 +52,28 @@ function App({user,admin}) {
             exact
             path="/admin"
             render={(props) =>
-              admin ? (
-                <Redirect to='/admin' />
+              !admin? (
+                <Redirect to='/admin-login' />
               ) : (
                 <Admin {...props} />
               )
             }
           />
 
-
-
-        <Route
+<Route
             exact
-            path="/admin-adduser"
+            path="/admin-login"
             render={(props) =>
-              admin ? (
-                <Redirect to='/admin-adduser' />
+              false? (
+                <Redirect to='/admin' />
               ) : (
-                <AdminAddUser {...props}/>
+                <AdminLogin {...props} />
               )
             }
           />
 
+
+        
 
 
 

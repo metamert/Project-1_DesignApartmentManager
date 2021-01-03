@@ -14,50 +14,56 @@ import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import { ToastContainer, toast } from 'react-toastify';
 import {connect} from "react-redux"
 import {setAdmin} from "../../redux/user/user.actions"
+import 'react-toastify/dist/ReactToastify.css';
 
 function SignIn(props) {
   const classes = useStyles();
   const [data, setdata] = React.useState({ email: "", password: "" });
 
+ 
+
+
   const handleSubmit = async () => {
     if (data.email && data.password) {
-   /**
-    *    try {
-        let response = await axios.post(
-          "https://localhost/api/login.php",
-          data
+   
+     
+      try {
+        const body = { admin_email:data.email, admin_password:data.password };
+        const response = await fetch(
+          "http://localhost:5000/authentication/admin-login",
+          {
+            method: "POST",
+            headers: {
+              "Content-type": "application/json"
+            },
+            body: JSON.stringify(body)
+          }
         );
-        console.log(response);
-        if (response.data.status) {
-          localStorage.setItem("user", "user");
-          props.set("user");
-          props.adduser()
-          alert("succesfull login");
-          props.history.push("/admin");
+  
+        const parseRes = await response.json();
+  console.log(parseRes)
+  
+        if (parseRes.status) {
+        //  localStorage.setItem("token", parseRes.jwtToken);
+        props.adduser(parseRes)
+          toast.success("Logged in Successfully");
+         props.history.push("/admin")
         } else {
-          alert("password or email not correct");
+      
+          toast.error(parseRes);
         }
-      } catch (error) {
-        alert("error");
-      }
-    * 
-    */
-
-   localStorage.setItem("user", "user");
-   props.set("user");
-   props.adduser()
-   alert("succesfull login");
-   props.history.push("/admin");
-
-    } else {
-      if (!data.email) {
-        alert("email can not be empty");
-      } else {
-        alert("password can not be empty");
+      } catch (err) {
+        console.error(err.message);
       }
     }
+
+
+
+
+
   };
 
   const handleChange = (name, val) => {
@@ -72,7 +78,7 @@ function SignIn(props) {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Admin login
+          Admin Login
         </Typography>
         <div className={classes.form} noValidate>
           <TextField
@@ -111,8 +117,16 @@ function SignIn(props) {
             color="primary"
             className={classes.submit}
           >
-            login to admin
+            Admin login 
           </Button>
+          <Grid container>
+            <Grid item xs>
+              
+            </Grid>
+          
+          </Grid>
+           
+           
         </div>
       </div>
     </Container>
@@ -120,7 +134,7 @@ function SignIn(props) {
 }
 
 const dispatchto=(dispatch)=>({
-setAdmin:(p)=>dispatch(setAdmin(p))
+adduser:(p)=>dispatch(setAdmin(p))
 })
 
 

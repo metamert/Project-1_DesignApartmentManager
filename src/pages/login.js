@@ -16,7 +16,7 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import { ToastContainer, toast } from 'react-toastify';
 import {connect} from "react-redux"
-import {addUser} from "../_actions/user_actions"
+import {setCurrentUser} from "../redux/user/user.actions"
 import 'react-toastify/dist/ReactToastify.css';
 
 function SignIn(props) {
@@ -46,9 +46,9 @@ function SignIn(props) {
         const parseRes = await response.json();
   console.log(parseRes)
   
-        if (parseRes.jwtToken) {
+        if (parseRes.status) {
         //  localStorage.setItem("token", parseRes.jwtToken);
-         
+        props.adduser(parseRes)
           toast.success("Logged in Successfully");
         } else {
       
@@ -137,7 +137,7 @@ function SignIn(props) {
 }
 
 const dispatchto=(dispatch)=>({
-adduser:()=>dispatch(addUser())
+adduser:(p)=>dispatch(setCurrentUser(p))
 })
 
 

@@ -7,7 +7,7 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
 import Link from "@material-ui/core/Link";
 import Grid from "@material-ui/core/Grid";
-import Box from "@material-ui/core/Box";
+
 import Radio from "@material-ui/core/Radio";
 import MenuItem from "@material-ui/core/MenuItem";
 import RadioGroup from "@material-ui/core/RadioGroup";
@@ -16,13 +16,13 @@ import BackspaceIcon from "@material-ui/icons/Backspace";
 import { makeStyles } from "@material-ui/core/styles";
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import InputLabel from "@material-ui/core/InputLabel";
-import FormGroup from "@material-ui/core/FormGroup";
 
-import FormHelperText from "@material-ui/core/FormHelperText";
 import FormControl from "@material-ui/core/FormControl";
 import { connect } from "react-redux";
-import axios from "axios";
+
+import { ToastContainer, toast } from 'react-toastify';
 import Select from "@material-ui/core/Select";
+import {setCurrentUser} from "../../redux/user/user.actions"
 
 function Copyright() {
   return (
@@ -86,7 +86,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function AddUser({ cancel, updatePage, create, history, cur_user }) {
+function AddUser({ cancel, updatePage, create, history, cur_user,add_user }) {
   const classes = useStyles();
   const [data, set_data] = React.useState({
     phone_number: "",
@@ -104,7 +104,7 @@ function AddUser({ cancel, updatePage, create, history, cur_user }) {
   const [modalStyle] = React.useState(getModalStyle);
 
   React.useEffect(() => {
-    if (!cur_user) {
+    if (cur_user) {
       history.push("/login");
     }
   }, []);
@@ -140,21 +140,39 @@ function AddUser({ cancel, updatePage, create, history, cur_user }) {
     console.log(check());
     if (!check()) {
       try {
-        let response = await axios.post(
+        const body = data;
+        const response = await fetch(
           "http://localhost:5000/authentication/register",
-          data
+          {
+            method: "POST",
+            headers: {
+              "Content-type": "application/json"
+            },
+            body: JSON.stringify(body)
+          }
         );
-        console.log(response);
-        if (response.data.status) {
-          history.push("/admin");
+        const parseRes = await response.json();
+     
+  
+        if ( parseRes.status) {
+         
+         console.log(parseRes)
+
+
+
+add_user(parseRes)
+
+          toast.success("Register Successfully");
         } else {
-          alert(response.data.message);
+         
+          toast.error(parseRes);
         }
-      } catch (error) {
-        alert("error");
+      } catch (err) {
+      
+        toast.error("enter different phone number");
       }
     } else {
-      alert(check());
+      toast.error(check());
     }
   };
 
@@ -163,26 +181,17 @@ function AddUser({ cancel, updatePage, create, history, cur_user }) {
   };
   console.log(data);
   return (
-    <Grid container justify="center" style={{marginTop:50}}>
-       <ArrowBackIosIcon
-          type="submit"
-          variant="contained"
-          color="primary"
-          className="back needHover"
-       
-          onClick={() => history.push("/admin")}
-        >
-        
-        </ArrowBackIosIcon>
+    <Grid container  justify="center" >
+      
       <div className="form-responsive" noValidate>
-        <h1>Add User</h1>
+        <h1>New User</h1>
         <TextField
           variant="outlined"
           margin="normal"
           required
           fullWidth
           id="phone_number"
-          label="phone_number ex. 5111511412"
+          label="phone_number "
           name="phone_number"
           autoComplete="phone_number"
           autoFocus
@@ -327,4 +336,8 @@ const mapStateToProps = (state) => ({
   cur_user: state.user.user,
 });
 
-export default connect(mapStateToProps)(AddUser);
+const mapDispatchToState=(dispatch)=>({
+add_user:(payload)=> dispatch(setCurrentUser(payload))
+})
+
+export default connect(mapStateToProps,mapDispatchToState)(AddUser);
