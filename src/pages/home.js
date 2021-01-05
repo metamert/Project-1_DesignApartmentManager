@@ -24,6 +24,7 @@ const Home=(props)=> {
    <Grid container justify="center" direction="column" style={{width:"100%",textAlign:"center",paddingTop:50}}>
      <h1 style={{fontWeight:500,fontSize:30}}> Apartment Management App</h1>
     
+    
            <Lottie
             style={{zIndex:-1}}
             options={defaultOptions}
