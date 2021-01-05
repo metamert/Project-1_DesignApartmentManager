@@ -2,7 +2,7 @@ import logo from './logo.svg';
 import React from "react"
 import './App.css';
 import Navbar from "../src/components/navbar"
-
+import Dues from "./pages/Dues"
 import {
   BrowserRouter as Router,
   Switch,
@@ -62,6 +62,20 @@ function App({user,admin}) {
               )
             }
           />
+
+<Route
+            exact
+            path="/mydues"
+            render={(props) =>
+              !user ? (
+                <Redirect to='/login' />
+              ) : (
+                [<Navbar {...props}/>, <Dues {...props} />]
+               
+              )
+            }
+          />
+
        
         <Route
             exact

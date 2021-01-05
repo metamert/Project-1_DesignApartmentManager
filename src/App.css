@@ -7,6 +7,54 @@ a{
 .needHover:hover{
   cursor: pointer;
 }
+.unpaid{
+position: relative;
+display: flex;
+flex-direction: row;
+justify-content: center;
+padding: 2px;
+
+}
+.ct{
+  padding: 30px;
+
+}
+
+.modalCt{
+  height: 70vh;
+  width: 70vh;
+}
+
+.shadow-card {
+  margin-bottom: 20px;
+  width: 80% ;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  align-items: center;
+  padding: 50px; 
+  background-color: white;
+  box-shadow: 0 5px 10px rgba(154,160,185,.05), 0 15px 40px rgba(166,173,201,.2);
+  
+  position: relative;
+}
+
+
+
+.red{
+  color: red;
+}
+
+.clickToSee{
+  position: absolute;
+  top: -7px;
+  right: -16px;
+  color: green;
+  font-size: 12px;
+}
+
+
+
 
 .redCircle{
   width: 5px;

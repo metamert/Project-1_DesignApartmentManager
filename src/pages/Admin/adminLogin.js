@@ -33,7 +33,7 @@ function SignIn(props) {
       try {
         const body = { admin_email:data.email, admin_password:data.password };
         const response = await fetch(
-          "https://server-for-apartment.herokuapp.com/authentication/admin-login",
+          "http://localhost:5000/authentication/admin-login",
           {
             method: "POST",
             headers: {

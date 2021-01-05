@@ -14,6 +14,7 @@ import {setCurrentUser,setAdmin} from "../redux/user/user.actions"
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
+    
   },
   menuButton: {
     marginRight: theme.spacing(2),
@@ -33,7 +34,7 @@ console.log(props.history)
 
   return (
     <div className={classes.root}>
-      <AppBar position="static" color="#ff385c">
+      <AppBar position="static" color="#ff385c" style={{padding: "0 10%"}}>
         <Toolbar>
           <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
             <MenuIcon />
@@ -41,9 +42,11 @@ console.log(props.history)
           <Typography variant="h6" className={classes.title}>
             
           </Typography>
-          <Link to="/admin"> 
-          <Button color="secondary" variant="contained" className="mr-4">Admin Login</Button>
-          </Link>  
+          {props.cur_user&&<Link to="/mydues">
+          <Button color="secondary" variant="contained" style={{marginRight:30}} >my dues</Button>
+          </Link>
+         
+          }
         {!props.cur_user?<Link to="/login">
           <Button color="inherit" >User Login</Button>
           </Link>:

@@ -10,6 +10,7 @@ import Box from '@material-ui/core/Box';
 import Admin from "./admin"
 import AddUser from "./addUser"
 import AddAdmin from "./newAdmin"
+import Rates from "./rates"
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -79,6 +80,7 @@ export default function VerticalTabs() {
         <Tab label="Users" {...a11yProps(0)} />
         <Tab label="New User" {...a11yProps(1)} />
         <Tab label="New Admin" {...a11yProps(2)} />
+        <Tab label="Rates" {...a11yProps(3)} />
       
       </Tabs>
       <TabPanel  className="w100" value={value} index={0}>
@@ -90,8 +92,8 @@ export default function VerticalTabs() {
       <TabPanel className="w100" value={value} index={2}>
      <AddAdmin/>
       </TabPanel>
-      <TabPanel value={value} index={3}>
-        Item Four
+      <TabPanel className="w100" value={value} index={3}>
+        <Rates></Rates>
       </TabPanel>
       <TabPanel value={value} index={4}>
         Item Five

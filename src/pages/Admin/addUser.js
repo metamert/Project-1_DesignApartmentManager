@@ -142,7 +142,7 @@ function AddUser({ cancel, updatePage, create, history, cur_user,add_user }) {
       try {
         const body = data;
         const response = await fetch(
-          `https://server-for-apartment.herokuapp.com/authentication/register`,
+          `http://localhost:5000/authentication/register`,
           {
             method: "POST",
             headers: {
@@ -152,7 +152,7 @@ function AddUser({ cancel, updatePage, create, history, cur_user,add_user }) {
           }
         );
         const parseRes = await response.json();
-     
+        console.log(parseRes)
   
         if ( parseRes.status) {
          
@@ -162,7 +162,7 @@ function AddUser({ cancel, updatePage, create, history, cur_user,add_user }) {
 
 add_user(parseRes)
 
-          toast.success("Register Successfully");
+          toast.success("User added Successfully");
         } else {
          
           toast.error(parseRes);

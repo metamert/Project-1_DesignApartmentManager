@@ -17,7 +17,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import InputLabel from "@material-ui/core/InputLabel";
 import FormGroup from "@material-ui/core/FormGroup";
-
+import {CircularProgress} from "@material-ui/core"
 import FormHelperText from "@material-ui/core/FormHelperText";
 import FormControl from "@material-ui/core/FormControl";
 import { connect } from "react-redux";
@@ -88,14 +88,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function AddAdmin({  history, cur_admin,add_admin }) {
+function Rates({  history, admin,add_admin}) {
   const classes = useStyles();
   const [data, set_data] = React.useState({
-    admin_email:"",
-    admin_password: "",
- 
+    fitness_fee: 20,
+    other_fee: 30,
+    swimming_pool_fee: 20
   });
 
+const [loading, set_loading] = React.useState(true)
   const [error, seterror] = React.useState("");
   const [modalStyle] = React.useState(getModalStyle);
 
@@ -105,12 +106,16 @@ function AddAdmin({  history, cur_admin,add_admin }) {
    
     
 
-    if (!data.admin_email) {
-      return "email cannot be empty";
+    if (!data.fitness_fee) {
+      return "fitness fee cannot be empty";
     }
-    if (!data.admin_password) {
-      return "password cannot be empty";
+    if (!data.swimming_pool_fee) {
+      return "swimming fee cannot be empty";
     }
+    if (!data.other_fee) {
+        return "please enter all inputs";
+      }
+
 
     return false;
   };
@@ -120,32 +125,34 @@ function AddAdmin({  history, cur_admin,add_admin }) {
     if (!check()) {
       try {
         const body = data;
+        const myHeaders = new Headers();
+
+        myHeaders.append("Content-Type", "application/json");
+        myHeaders.append("jwt_token", admin.token);
+
         const response = await fetch(
-          `http://localhost:5000/authentication/new-admin`,
+          `http://localhost:5000/admin/rates`,
+
           {
-            method: "POST",
-            headers: {
-              "Content-type": "application/json"
-            },
-            body: JSON.stringify(body)
+            method: "PUT",
+            headers: myHeaders,
+            body: JSON.stringify(data),
           }
+         
         );
         const parseRes = await response.json();
      
   
-        if ( parseRes.status) {
+        
          
          console.log(parseRes)
 
 
+            set_data(parseRes)
 
-add_admin(parseRes)
 
-          toast.success("Admin added Successfully");
-        } else {
-         
-          toast.error(parseRes);
-        }
+          toast.success("Saved Successfully");
+       
       } catch (err) {
       
         toast.error("server error");
@@ -155,15 +162,40 @@ add_admin(parseRes)
     }
   };
 
+React.useEffect(() => {
+   fetchRates()
+}, [])
+
+
+const fetchRates=async ()=>{
+    
+
+  set_loading(true)
+        const response = await fetch(
+          `http://localhost:5000/admin/rates`,
+          {
+            method: "GET",
+            headers: { jwt_token: admin.token },
+            
+          }
+        );
+        const parseRes = await response.json();
+        console.log(parseRes)
+        set_data(parseRes[0])
+        set_loading(false)
+
+}
+
+
   const onChange = (name, value) => {
     set_data({ ...data, [name]: value });
   };
-  console.log(data);
+if(!loading)
   return (
     <Grid container justify="center" style={{marginTop:50}}>
       
       <div className="form-responsive" noValidate>
-        <h1>New Admin</h1>
+        <h1>Monthly Rates</h1>
        
       
          
@@ -171,25 +203,42 @@ add_admin(parseRes)
             variant="outlined"
             margin="normal"
             required
+            type="number"
        fullWidth
-            name="admin_email"
-            label="email"
-            type="email"
-            id="email"
+       value={data.swimming_pool_fee}
+            name="swimming_pool_fee"
+            label="Swimming pool rate"
+           
+            id="Swimming pool rate"
             onChange={(e) => onChange(e.target.name, e.target.value)}
           />
        
+       <TextField
+          variant="outlined"
+          margin="normal"
+          required
+          fullWidth
+          value={data.fitness_fee}
+          type="number"
+          id="fitness_fee"
+          label="fitness fee "
+          name="fitness_fee"
+          autoComplete="fitness_fee"
+          autoFocus
+          onChange={(e) => onChange(e.target.name, e.target.value)}
+        />
 
         <TextField
           variant="outlined"
           margin="normal"
           required
           fullWidth
-          type="password"
-          id="admin_password"
-          label="admin_password "
-          name="admin_password"
-          autoComplete="admin_password"
+          value={data.other_fee}
+          type="number"
+          id="other fees"
+          label="Security , Cleaning etc .. "
+          name="other_fee"
+          autoComplete="other fees"
           autoFocus
           onChange={(e) => onChange(e.target.name, e.target.value)}
         />
@@ -204,20 +253,22 @@ add_admin(parseRes)
           className={classes.submit}
           onClick={Submit}
         >
-          New Admin
+          Save
         </Button>
        
       </div>
     </Grid>
-  );
+  )
+  else return(<CircularProgress></CircularProgress>)
 }
 
 const mapStateToProps = (state) => ({
   cur_user: state.user.user,
+  admin: state.user.admin,
 });
 
 const mapDispatchToState=(dispatch)=>({
 add_admin:(payload)=> dispatch(setAdmin(payload))
 })
 
-export default connect(mapStateToProps,mapDispatchToState)(AddAdmin);
+export default connect(mapStateToProps)(Rates);
