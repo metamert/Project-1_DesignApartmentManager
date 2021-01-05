@@ -33,7 +33,7 @@ const StripeCheckoutButton = ({ price,id ,up}) => {
       label='Pay Now'
       name='Apartment Management'
       
-      image='https://svgshare.com/i/CUz.svg'
+    image="https://sbp-plugin-images.s3.eu-west-1.amazonaws.com/technologies1905_5eb57bd25635d_icon.jpg"
       description={`Your total is $${price}`}
       amount={priceForStripe}
       panelLabel='Pay Now'
