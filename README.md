@@ -1,6 +1,24 @@
 ![akdeniz](https://user-images.githubusercontent.com/58224943/103657347-d8fd1080-4f7a-11eb-93d0-3a45a70b4520.gif)
 
-# Getting Started with Create React App
+# Akdeniz University Web dev Assigment Apartment Management 
+
+## Instructer => MELIH GUNAY
+
+
+## Student => Orkun Mert YİĞİT 20170808005
+
+## Technologies I have used:
+
+Front end => React, Redux ,Stripe (payment component),Lottie Animation, Axios ,HTML,CSS
+
+Back end => POSTGRE SQL ,  Node.js ,Express.js, Stripe gateway, Restful Api , JWT token for private routes for admin
+
+Example Images from app :
+
+
+
+
+![image](https://user-images.githubusercontent.com/58224943/103658194-f383b980-4f7b-11eb-8fd2-056b409b885f.png)
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
