@@ -121,7 +121,7 @@ function AddAdmin({  history, cur_admin,add_admin }) {
       try {
         const body = data;
         const response = await fetch(
-          "http://localhost:5000/authentication/new-admin",
+          `https://server-for-apartment.herokuapp.com/authentication/new-admin`,
           {
             method: "POST",
             headers: {

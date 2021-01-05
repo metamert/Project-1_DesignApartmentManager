@@ -142,7 +142,7 @@ function AddUser({ cancel, updatePage, create, history, cur_user,add_user }) {
       try {
         const body = data;
         const response = await fetch(
-          "http://localhost:5000/authentication/register",
+          `https://server-for-apartment.herokuapp.com/authentication/register`,
           {
             method: "POST",
             headers: {

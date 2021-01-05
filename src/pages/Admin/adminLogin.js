@@ -33,7 +33,7 @@ function SignIn(props) {
       try {
         const body = { admin_email:data.email, admin_password:data.password };
         const response = await fetch(
-          "http://localhost:5000/authentication/admin-login",
+          "https://server-for-apartment.herokuapp.com/authentication/admin-login",
           {
             method: "POST",
             headers: {
@@ -119,6 +119,7 @@ function SignIn(props) {
           >
             Admin login 
           </Button>
+          <p>email : admin@gmail.com , password:admin123</p>
           <Grid container>
             <Grid item xs>
               

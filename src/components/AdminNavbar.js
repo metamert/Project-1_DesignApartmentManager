@@ -41,16 +41,14 @@ console.log(props.history)
           <Typography variant="h6" className={classes.title}>
             
           </Typography>
-          <Link to="/admin"> 
-          <Button color="secondary" variant="contained" className="mr-4">Admin Login</Button>
-          </Link>  
-        {!props.cur_user?<Link to="/login">
-          <Button color="inherit" >User Login</Button>
+        
+        {!props.admin?<Link to="/login">
+          
           </Link>:
           <Link to="login">
            <Button color="inherit" onClick={()=>{
            props.del_user(null)
-        
+        props.del_user2(null)
 
 
            }}> Logout</Button></Link>
@@ -67,7 +65,8 @@ admin:state.user.admin
 })
 
 const dispatchto=(dispatch)=>({
-del_user:()=>dispatch(setCurrentUser(null))
+del_user:()=>dispatch(setAdmin(null)),
+del_user2:()=>dispatch(setCurrentUser(null))
 })
 
 export default connect(stateto,dispatchto)(ButtonAppBar)

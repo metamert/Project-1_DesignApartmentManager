@@ -187,7 +187,7 @@ function StickyHeadTable({ admin, history }) {
       myHeaders.append("Content-Type", "application/json");
       myHeaders.append("jwt_token", admin.token);
 
-      await fetch(`http://localhost:5000/admin/update-user/${data.user_id}`, {
+      await fetch( `https://server-for-apartment.herokuapp.com/admin/update-user/${data.user_id}`, {
         method: "PUT",
         headers: myHeaders,
         body: JSON.stringify(data)
@@ -213,7 +213,7 @@ function StickyHeadTable({ admin, history }) {
     let arr = [];
     setloading(true);
     try {
-      const res = await fetch("http://localhost:5000/admin/", {
+      const res = await fetch( `https://server-for-apartment.herokuapp.com/admin/`, {
         method: "GET",
         headers: { jwt_token: admin.token }
       });

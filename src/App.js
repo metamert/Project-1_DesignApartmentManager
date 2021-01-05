@@ -16,7 +16,7 @@ import AdminLogin from "./pages/Admin/adminLogin"
 import Login from "./pages/login"
 import AdminAddUser from "./pages/Admin/addUser"
 import Admin from "./pages/Admin/adminDashboard"
-
+import AdminNavbar from "./components/AdminNavbar"
 import Register from "./pages/register"
 import { ToastContainer, toast } from 'react-toastify';
 import Announce from "./pages/Announce";
@@ -26,24 +26,39 @@ function App({user,admin}) {
   console.log(user)
   return (
     <Router>
-   <Navbar   ></Navbar>
+   
   
 
       {/* A <Switch> looks through its children <Route>s and
           renders the first one that matches the current URL. */}
       <Switch>
-        <Route path="/" exact component={Home}>
-         
-        </Route>
+      <Route
+            exact
+            path="/"
+            render={(props) =>
+              false? (
+                <Redirect to='/' />
+              ) : ([<Navbar {...props}/>,
+                <Home {...props}/>
+              ]
+               
+              )
+            }
+          />
       
+
+
+
+
+
         <Route
             exact
-            path="/mydues"
+            path="/announce"
             render={() =>
-              admin ? (
-                <Redirect to='/mydues' />
+              !user ? (
+                <Redirect to='/login' />
               ) : (
-                <Login />
+                <Announce />
               )
             }
           />
@@ -55,7 +70,7 @@ function App({user,admin}) {
               !admin? (
                 <Redirect to='/admin-login' />
               ) : (
-                <Admin {...props} />
+                [<AdminNavbar {...props}/>, <Admin {...props} />]
               )
             }
           />
@@ -67,7 +82,7 @@ function App({user,admin}) {
               false? (
                 <Redirect to='/admin' />
               ) : (
-                <AdminLogin {...props} />
+                [<AdminNavbar {...props}/>,<AdminLogin {...props} />]
               )
             }
           />
@@ -83,8 +98,8 @@ function App({user,admin}) {
             render={(props) =>
               user ? (
                 <Redirect to='/' />
-              ) : (
-                <Login {...props}/>
+              ) : ([<Navbar {...props}/>,
+                <Login {...props}/>]
               )
             }
           />
@@ -96,7 +111,7 @@ function App({user,admin}) {
               user ? (
                 <Redirect to='/' />
               ) : (
-                <Register  {...props} />
+                [<Navbar {...props}/>,<Register  {...props} />]
               )
             }
           />

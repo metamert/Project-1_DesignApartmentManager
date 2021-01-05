@@ -23,7 +23,7 @@ function SignIn(props) {
   const classes = useStyles();
   const [data, setdata] = React.useState({ email: "", password: "" });
 
- 
+ console.log(process.env.dom)
 
 
   const handleSubmit = async () => {
@@ -33,7 +33,7 @@ function SignIn(props) {
       try {
         const body = { user_email:data.email, user_password:data.password };
         const response = await fetch(
-          "http://localhost:5000/authentication/login",
+          `https://server-for-apartment.herokuapp.com/authentication/login`,
           {
             method: "POST",
             headers: {
@@ -50,6 +50,7 @@ function SignIn(props) {
         //  localStorage.setItem("token", parseRes.jwtToken);
         props.adduser(parseRes)
           toast.success("Logged in Successfully");
+          props.history.push("/announce")
         } else {
       
           toast.error(parseRes);
@@ -123,7 +124,7 @@ function SignIn(props) {
               
             </Grid>
             <Grid item>
-              <Link to="register" variant="body2" style={{color:"#f50057"}}>
+              <Link to="register" variant="body2" style={{color:"#f50057",fontSize:18,marginTop:20}}>
                 {"Don't have an account? Sign Up"}
               </Link>
             </Grid>
