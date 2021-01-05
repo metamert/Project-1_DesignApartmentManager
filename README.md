@@ -22,7 +22,9 @@ Example Images from app :
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Available Scripts
+## POSTGRE SQL DIAGRAM
+![image](https://user-images.githubusercontent.com/58224943/103662872-7e1ae780-4f81-11eb-938c-0af53d801ec4.png)
+
 
 In the project directory, you can run:
 
