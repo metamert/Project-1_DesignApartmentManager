@@ -160,6 +160,13 @@ function StickyHeadTable({ admin, history }) {
     return month + "/" + day + "/" + year;
   }
 
+  function dynamicSort(property) {
+    return function(a, b) {
+        return (a[property] > b[property]) ? -1 : (a[property] < b[property]) ? 1 : 0;
+    }
+ }
+
+
   const deleteUserApi = async (id) => {
     try {
       console.log(id);
@@ -361,7 +368,7 @@ function StickyHeadTable({ admin, history }) {
               </TableRow>
             </TableHead>
             <TableBody>
-              {rows
+              {rows.sort((a, b) => a.user_id -b.user_id)
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row) => {
                   return (

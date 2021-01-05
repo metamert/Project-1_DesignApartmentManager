@@ -113,8 +113,13 @@ export default function SignIn({cancel,updatePage,selectedUser,edit}) {
 
 
 const Submit=()=>{
+
+
+
+ setTimeout(() => {
   edit(data)
   cancel()
+ }, 300);
 
 }
 
@@ -270,6 +275,7 @@ set_data(selectedUser)
                   checked={data.is_active}
                   onChange={(e) => {
                     onChange("is_active", e.target.checked);
+                  
                   }}
                   inputProps={{ "aria-label": "primary checkbox" }}
                 />
