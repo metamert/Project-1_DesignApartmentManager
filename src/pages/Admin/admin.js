@@ -244,6 +244,30 @@ function StickyHeadTable({ admin, history }) {
     setopen3(true);
   };
 
+const simulate=async ()=>{
+  try {
+    const myHeaders = new Headers();
+
+    myHeaders.append("Content-Type", "application/json");
+    myHeaders.append("jwt_token", admin.token);
+
+    await fetch(`http://localhost:5000/admin/simulate/`, {
+      method: "POST",
+      headers: myHeaders,
+      
+    });
+
+    await Update();
+
+    // window.location = "/";
+  } catch (err) {
+    console.error(err.message);
+  }
+
+}
+
+
+
   const Update = async () => {
     let arr = [];
     setloading(true);
@@ -331,6 +355,7 @@ function StickyHeadTable({ admin, history }) {
   if (!loading)
     return (
       <Paper className={classes.root}>
+        <Button variant="contained" color="secondary" onClick={simulate}>Simulate Dues</Button>
         <Modal
           selectedUser={selected}
           open={open2}
