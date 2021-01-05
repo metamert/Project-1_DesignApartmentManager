@@ -23,6 +23,58 @@ router.get("/", authorize, async (req, res) => {
 
 
 
+router.post("/simulate", authorize, async (req, res) => {
+  try {
+    
+
+    const users = await pool.query("SELECT * FROM users");
+   let getCurrentRate = await pool.query("SELECT * FROM rates");
+   let data = getCurrentRate.rows[0];
+   for (const user of users.rows) {
+
+    let getCurrentRate = await pool.query("SELECT * FROM rates");
+    console.log("current response", getCurrentRate);
+   
+   
+   
+    let swimming_fee = 0 
+
+if(user.swimming_pool){
+  swimming_fee=data.swimming_pool_fee;
+}
+
+let fitness_fee = 0 
+
+if(user.fitness){
+  fitness_fee=data.fitness_fee;
+}
+
+
+
+    
+    let other_fee = data.other_fee;
+    let total = swimming_fee + other_fee + fitness_fee;
+ 
+
+
+    let due = await pool.query(
+      "INSERT INTO dues (user_id , amount ,fitness,swimming_pool,flat_no) VALUES ($1, $2, $3,$4,$5) RETURNING *",
+      [user.user_id, total, fitness_fee,swimming_fee,user.flat_no]
+    );
+
+
+
+    }
+
+    res.json({status:true});
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server error");
+  }
+});
+
+
+
 router.get("/flats", async (req, res) => {
   try {
     // const user = await pool.query(
@@ -218,6 +270,13 @@ router.put("/update-user/:id", authorize, async (req, res) => {
       moved_at,
       user_id,
     } = req.body;
+
+let move=null
+
+if(!is_active){
+  move=new Date()
+}
+
     console.log(user_name)
     const updateTodo = await pool.query(
       "UPDATE users SET  created_at = $1,user_name = $2,user_email = $3,phone_number = $4,flat_status = $5,flat_no = $6,swimming_pool = $7, fitness = $8,is_active = $9,moved_at = $10 WHERE user_id = $11  RETURNING *",
@@ -231,7 +290,7 @@ router.put("/update-user/:id", authorize, async (req, res) => {
         swimming_pool,
         fitness,
         is_active,
-        moved_at,
+        move,
         id,
       ]
     );
