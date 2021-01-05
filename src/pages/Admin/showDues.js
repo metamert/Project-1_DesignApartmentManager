@@ -1,14 +1,34 @@
 import { Button, Grid } from "@material-ui/core";
 import React ,{useEffect,useState}from "react";
 import {connect} from "react-redux"
-
- function Dues({dues}) {
-
-
-
+import { ToastContainer, toast } from "react-toastify";
+import axios from "axios"
+ function Dues({dues,admin,update}) {
 
 
 
+
+
+
+  const makePayment=async (id)=>{
+    try {
+      await axios({
+        url: 'http://localhost:5000/dues/manual-payment',
+        method: 'post',
+        data: {
+          
+          token: admin.token,
+          id:id
+        }
+      })
+      toast.success("payment is done !")
+      update()
+    } catch (error) {
+      toast.error("error")
+    }
+    
+    }
+    
 
 
 
@@ -38,7 +58,7 @@ console.log(dues)
 
 
 </Grid>
-{due.is_paid?<h3 style={{color:"green"}}>paid !</h3>:<h3 style={{color:"red"}}>not paid yet!</h3>}
+{due.is_paid?<h3 style={{color:"green"}}>paid !</h3>:<Button variant="contained" color="secondary" onClick={()=>makePayment(due.due_id)} >Mark as paid</Button>}
 
         </div>
       )}
@@ -49,7 +69,8 @@ console.log(dues)
 
 
 const stateto=(state)=>({
-    user:state.user.currentUser.user,
+   
+    admin:state.user.admin,
     
     })
 

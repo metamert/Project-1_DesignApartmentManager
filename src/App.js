@@ -54,11 +54,11 @@ function App({user,admin}) {
         <Route
             exact
             path="/announce"
-            render={() =>
+            render={(props) =>
               !user ? (
                 <Redirect to='/login' />
               ) : (
-                <Announce />
+                [<Navbar {...props}/>, <Announce {...props}/>]
               )
             }
           />

@@ -10,7 +10,9 @@ import Box from '@material-ui/core/Box';
 import Admin from "./admin"
 import AddUser from "./addUser"
 import AddAdmin from "./newAdmin"
+import CrudAdmin from "./CRUDadmin"
 import Rates from "./rates"
+import Reports from "./Reports"
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -53,7 +55,7 @@ const useStyles = makeStyles((theme) => ({
     height: "100vh",
   },
   tabs: {
-      minWidth:120,
+      minWidth:140,
     borderRight: `1px solid ${theme.palette.divider}`,
   },
 }));
@@ -79,8 +81,10 @@ export default function VerticalTabs() {
       >
         <Tab label="Users" {...a11yProps(0)} />
         <Tab label="New User" {...a11yProps(1)} />
-        <Tab label="New Admin" {...a11yProps(2)} />
-        <Tab label="Rates" {...a11yProps(3)} />
+        <Tab label="View Admins" {...a11yProps(2)} />
+        <Tab label="New Admin" {...a11yProps(3)} />
+        <Tab label="Rates" {...a11yProps(4)} />
+        <Tab label="Reports" {...a11yProps(5)} />
       
       </Tabs>
       <TabPanel  className="w100" value={value} index={0}>
@@ -90,20 +94,18 @@ export default function VerticalTabs() {
      <AddUser/>
       </TabPanel>
       <TabPanel className="w100" value={value} index={2}>
-     <AddAdmin/>
+        <CrudAdmin></CrudAdmin>
       </TabPanel>
       <TabPanel className="w100" value={value} index={3}>
+     <AddAdmin/>
+      </TabPanel>
+      <TabPanel className="w100" value={value} index={4}>
         <Rates></Rates>
       </TabPanel>
-      <TabPanel value={value} index={4}>
-        Item Five
+      <TabPanel className="w100" value={value} index={5}>
+        <Reports></Reports>
       </TabPanel>
-      <TabPanel value={value} index={5}>
-        Item Six
-      </TabPanel>
-      <TabPanel value={value} index={6}>
-        Item Seven
-      </TabPanel>
+      
     </div>
   );
 }

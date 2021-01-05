@@ -40,6 +40,44 @@ padding: 2px;
 }
 
 
+.flat{
+
+  margin:20px;
+  width: 100px ;
+  height: 100px;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px; 
+
+  box-shadow: 0 5px 10px rgba(154,160,185,.05), 0 15px 40px rgba(166,173,201,.2);
+  
+  position: relative;
+}
+.flat:hover{
+  cursor: pointer;
+}
+.flex{
+  display: flex;
+}
+
+.Apartment{
+
+  width: 350px;
+  padding:10px ;
+  border: 1px solid black;
+}
+
+.fullw{
+  width: 100%;
+}
+
+.green{
+  background-color: green;
+}
+
+
 
 .red{
   color: red;

@@ -178,6 +178,10 @@ function StickyHeadTable({ admin, history }) {
     }
   };
 
+
+
+
+
   const edit = async (data) => {
     try {
       const myHeaders = new Headers();
@@ -337,7 +341,7 @@ function StickyHeadTable({ admin, history }) {
           open={open3}
           cancel={() => setopen3(false)}
           Content={
-            <ShowDuesComponent dues={selected2}  cancel={() => setopen3(false)} />
+            <ShowDuesComponent dues={selected2} update={Update}  cancel={() => setopen3(false)} />
           }
         ></Modal2>
 

@@ -23,7 +23,7 @@ import { connect } from "react-redux";
 import { ToastContainer, toast } from 'react-toastify';
 import Select from "@material-ui/core/Select";
 import {setCurrentUser} from "../../redux/user/user.actions"
-
+import axios from "axios"
 
 function Copyright() {
   return (
@@ -109,11 +109,15 @@ export default function SignIn({cancel,updatePage,selectedUser,edit}) {
   )
 
   const [modalStyle] = React.useState(getModalStyle);
+
+
+
 const Submit=()=>{
   edit(data)
   cancel()
 
 }
+
 
   const onChange=(name,value)=>{
 set_data({...data,[name]:value})
@@ -226,9 +230,9 @@ set_data(selectedUser)
             />
           </Grid>
         </RadioGroup>
-
-
+     
         <Grid container row justify="space-evenly">
+
         <h4>Exstra Services</h4>
        
             <FormControlLabel
@@ -255,8 +259,23 @@ set_data(selectedUser)
               }
               label="Swimming pool"
             />
-        
+      
        
+         
+
+          </Grid>
+          <FormControlLabel
+              control={
+                <Checkbox
+                  checked={data.is_active}
+                  onChange={(e) => {
+                    onChange("is_active", e.target.checked);
+                  }}
+                  inputProps={{ "aria-label": "primary checkbox" }}
+                />
+              }
+              label="Mark as Active"
+            />
           <Button
             type="submit"
             fullWidth
@@ -267,7 +286,8 @@ set_data(selectedUser)
           >
           Save 
           </Button>
-          </Grid>
+        
+
           <Grid container>
             
             <Grid item>

@@ -14,15 +14,15 @@ import RadioGroup from "@material-ui/core/RadioGroup";
 import Typography from "@material-ui/core/Typography";
 import BackspaceIcon from "@material-ui/icons/Backspace";
 import { makeStyles } from "@material-ui/core/styles";
-import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
+import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
 import InputLabel from "@material-ui/core/InputLabel";
 
 import FormControl from "@material-ui/core/FormControl";
 import { connect } from "react-redux";
 
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer, toast } from "react-toastify";
 import Select from "@material-ui/core/Select";
-import {setCurrentUser} from "../../redux/user/user.actions"
+import { setCurrentUser } from "../../redux/user/user.actions";
 
 function Copyright() {
   return (
@@ -86,7 +86,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function AddUser({ cancel, updatePage, create, history, cur_user,add_user }) {
+function AddUser({ cancel, updatePage, create, history, cur_user, add_user ,admin}) {
   const classes = useStyles();
   const [data, set_data] = React.useState({
     phone_number: "",
@@ -101,13 +101,38 @@ function AddUser({ cancel, updatePage, create, history, cur_user,add_user }) {
   });
 
   const [error, seterror] = React.useState("");
+  const [flatss, setflats] = React.useState([]);
   const [modalStyle] = React.useState(getModalStyle);
 
   React.useEffect(() => {
     if (cur_user) {
       history.push("/login");
     }
+    getFlats()
   }, []);
+
+
+
+ const getFlats=async ()=>{
+
+  const res = await fetch(`http://localhost:5000/admin/flats`, {
+    method: "GET",
+    headers: { jwt_token: admin.token },
+  });
+const flats=await res.json()
+console.log("flats",flats)
+setflats(flats)
+ }
+
+const findFlats=(flat_)=>{
+  console.log(flatss)
+  console.log(flatss.find(flat=>flat.flat_no===flat_))
+  return flatss.find(flat=>{
+ console.log(flat.flat_no) 
+    return  flat.flat_no===flat_
+  })
+}
+
 
   const check = () => {
     var phoneno = /^\d{10}$/;
@@ -146,29 +171,24 @@ function AddUser({ cancel, updatePage, create, history, cur_user,add_user }) {
           {
             method: "POST",
             headers: {
-              "Content-type": "application/json"
+              "Content-type": "application/json",
             },
-            body: JSON.stringify(body)
+            body: JSON.stringify(body),
           }
         );
         const parseRes = await response.json();
-        console.log(parseRes)
-  
-        if ( parseRes.status) {
-         
-         console.log(parseRes)
+        console.log(parseRes);
 
+        if (parseRes.status) {
+          console.log(parseRes);
 
-
-add_user(parseRes)
+          add_user(parseRes);
 
           toast.success("User added Successfully");
         } else {
-         
           toast.error(parseRes);
         }
       } catch (err) {
-      
         toast.error("enter different phone number");
       }
     } else {
@@ -181,8 +201,7 @@ add_user(parseRes)
   };
   console.log(data);
   return (
-    <Grid container  justify="center" >
-      
+    <Grid container justify="center">
       <div className="form-responsive" noValidate>
         <h1>New User</h1>
         <TextField
@@ -238,7 +257,6 @@ add_user(parseRes)
           onChange={(e) => onChange(e.target.name, e.target.value)}
         />
 
-
         <FormControl
           variant="filled"
           style={{ width: "100%", marginTop: 20, marginBottom: 10 }}
@@ -251,15 +269,13 @@ add_user(parseRes)
               onChange("flat_no", e.target.value);
             }}
           >
-            <MenuItem value={"A-1"}>A-1</MenuItem>
-            <MenuItem value={"A-2"}>A-2</MenuItem>
-            <MenuItem value={"A-3"}>A-3</MenuItem>
-            <MenuItem value={"B-1"}>B-1</MenuItem>
-            <MenuItem value={"B-2"}>B-2</MenuItem>
-            <MenuItem value={"B-3"}>B-3</MenuItem>
-            <MenuItem value={"C-1"}>C-1</MenuItem>
-            <MenuItem value={"C-2"}>C-2</MenuItem>
-            <MenuItem value={"C-3"}>C-3</MenuItem>
+           {!findFlats("A-1")&&<MenuItem value={"A-1"}>A-1</MenuItem>} 
+           {!findFlats("A-2")&&<MenuItem value={"A-2"}>A-2</MenuItem>} 
+           {!findFlats("B-1")&&<MenuItem value={"B-1"}>B-1</MenuItem>} 
+           {!findFlats("B-2")&&<MenuItem value={"B-2"}>B-2</MenuItem>} 
+           {!findFlats("C-1")&&<MenuItem value={"C-1"}>C-1</MenuItem>} 
+           {!findFlats("C-2")&&<MenuItem value={"C-2"}>C-2</MenuItem>} 
+
           </Select>
         </FormControl>
 
@@ -282,38 +298,34 @@ add_user(parseRes)
           </Grid>
         </RadioGroup>
 
-
         <Grid container row justify="space-evenly">
-        <h4>Exstra Services</h4>
-       
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={data.fitness}
-                  onChange={(e) => {
-                    onChange("fitness", e.target.checked);
-                  }}
-                  inputProps={{ "aria-label": "primary checkbox" }}
-                />
-              }
-              label="Fitness service"
-            />
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={data.swimming_pool}
-                  onChange={(e) => {
-                    onChange("swimming_pool", e.target.checked);
-                  }}
-                  inputProps={{ "aria-label": "primary checkbox" }}
-                />
-              }
-              label="Swimming pool"
-            />
-        
+          <h4>Exstra Services</h4>
+
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={data.fitness}
+                onChange={(e) => {
+                  onChange("fitness", e.target.checked);
+                }}
+                inputProps={{ "aria-label": "primary checkbox" }}
+              />
+            }
+            label="Fitness service"
+          />
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={data.swimming_pool}
+                onChange={(e) => {
+                  onChange("swimming_pool", e.target.checked);
+                }}
+                inputProps={{ "aria-label": "primary checkbox" }}
+              />
+            }
+            label="Swimming pool"
+          />
         </Grid>
-
-
 
         <Button
           type="submit"
@@ -326,7 +338,6 @@ add_user(parseRes)
         >
           Add User
         </Button>
-       
       </div>
     </Grid>
   );
@@ -334,10 +345,11 @@ add_user(parseRes)
 
 const mapStateToProps = (state) => ({
   cur_user: state.user.user,
+  admin:state.user.admin
 });
 
-const mapDispatchToState=(dispatch)=>({
-add_user:(payload)=> dispatch(setCurrentUser(payload))
-})
+const mapDispatchToState = (dispatch) => ({
+  add_user: (payload) => dispatch(setCurrentUser(payload)),
+});
 
-export default connect(mapStateToProps,mapDispatchToState)(AddUser);
+export default connect(mapStateToProps, mapDispatchToState)(AddUser);

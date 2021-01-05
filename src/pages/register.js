@@ -101,7 +101,7 @@ function AddUser({ cancel, updatePage, create, history, cur_user,add_user }) {
     fitness: false,
     flat_status: "Owner",
   });
-
+  const [flatss, setflats] = React.useState([]);
   const [error, seterror] = React.useState("");
   const [modalStyle] = React.useState(getModalStyle);
 
@@ -109,6 +109,8 @@ function AddUser({ cancel, updatePage, create, history, cur_user,add_user }) {
     if (cur_user) {
       history.push("/login");
     }
+
+    getFlats()
   }, []);
 
   const check = () => {
@@ -138,6 +140,29 @@ function AddUser({ cancel, updatePage, create, history, cur_user,add_user }) {
     return false;
   };
 
+
+
+  const getFlats=async ()=>{
+
+    const res = await fetch(`http://localhost:5000/admin/flats`, {
+      method: "GET",
+     
+    });
+  const flats=await res.json()
+  console.log("flats",flats)
+  setflats(flats)
+   }
+  
+  const findFlats=(flat_)=>{
+    console.log(flatss)
+    console.log(flatss.find(flat=>flat.flat_no===flat_))
+    return flatss.find(flat=>{
+   console.log(flat.flat_no) 
+      return  flat.flat_no===flat_
+    })
+  }
+
+
   const Submit = async () => {
     console.log(check());
     if (!check()) {
@@ -163,6 +188,7 @@ function AddUser({ cancel, updatePage, create, history, cur_user,add_user }) {
 
 
 add_user(parseRes)
+history.push("/announce")
 
           toast.success("Register Successfully");
         } else {
@@ -262,15 +288,12 @@ add_user(parseRes)
               onChange("flat_no", e.target.value);
             }}
           >
-            <MenuItem value={"A-1"}>A-1</MenuItem>
-            <MenuItem value={"A-2"}>A-2</MenuItem>
-            <MenuItem value={"A-3"}>A-3</MenuItem>
-            <MenuItem value={"B-1"}>B-1</MenuItem>
-            <MenuItem value={"B-2"}>B-2</MenuItem>
-            <MenuItem value={"B-3"}>B-3</MenuItem>
-            <MenuItem value={"C-1"}>C-1</MenuItem>
-            <MenuItem value={"C-2"}>C-2</MenuItem>
-            <MenuItem value={"C-3"}>C-3</MenuItem>
+            {!findFlats("A-1")&&<MenuItem value={"A-1"}>A-1</MenuItem>} 
+           {!findFlats("A-2")&&<MenuItem value={"A-2"}>A-2</MenuItem>} 
+           {!findFlats("B-1")&&<MenuItem value={"B-1"}>B-1</MenuItem>} 
+           {!findFlats("B-2")&&<MenuItem value={"B-2"}>B-2</MenuItem>} 
+           {!findFlats("C-1")&&<MenuItem value={"C-1"}>C-1</MenuItem>} 
+           {!findFlats("C-2")&&<MenuItem value={"C-2"}>C-2</MenuItem>} 
           </Select>
         </FormControl>
 
