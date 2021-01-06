@@ -29,7 +29,7 @@ function SignIn(props) {
   const handleSubmit = async () => {
     if (data.email && data.password) {
    
-     
+   
       try {
         const body = { admin_email:data.email, admin_password:data.password };
         const response = await fetch(
@@ -58,6 +58,19 @@ function SignIn(props) {
       } catch (err) {
         console.error(err.message);
       }
+    }else{
+
+      if(data.email){
+
+        toast.error("enter password")
+      }else{
+
+        toast.error("enter email")
+      }
+
+
+
+
     }
 
 
@@ -119,7 +132,7 @@ function SignIn(props) {
           >
             Admin login 
           </Button>
-          <p>email : admin@gmail.com , password:admin123</p>
+        
           <Grid container>
             <Grid item xs>
               

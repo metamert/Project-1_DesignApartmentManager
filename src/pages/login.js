@@ -58,6 +58,17 @@ function SignIn(props) {
       } catch (err) {
         console.error(err.message);
       }
+    }else{
+
+      if(data.email){
+
+        toast.error("enter password")
+      }else{
+
+        toast.error("enter email")
+      }
+
+
     }
 
 

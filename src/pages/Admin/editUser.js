@@ -87,8 +87,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function SignIn({cancel,updatePage,selectedUser,edit}) {
+
+
+
+function EditUser({cancel,updatePage,selectedUser,edit,admin}) {
   const classes = useStyles();
+  const [flatss, setflats] = React.useState([]);
   const [data,set_data]=React.useState(
     {
       user_id:"",
@@ -112,6 +116,28 @@ export default function SignIn({cancel,updatePage,selectedUser,edit}) {
 
 
 
+  const getFlats=async ()=>{
+
+    const res = await fetch(`http://localhost:5000/admin/flats`, {
+      method: "GET",
+      headers: { jwt_token: admin.token },
+    });
+  const flats=await res.json()
+  console.log("flats",flats)
+  setflats(flats)
+   }
+  
+  const findFlats=(flat_)=>{
+    console.log(flatss)
+    console.log(flatss.find(flat=>flat.flat_no===flat_))
+    return flatss.find(flat=>{
+   console.log(flat.flat_no) 
+      return  flat.flat_no===flat_
+    })
+  }
+
+
+
 const Submit=()=>{
 
 
@@ -129,7 +155,8 @@ set_data({...data,[name]:value})
   }
 
 React.useEffect(() => {
- 
+ getFlats()
+
 set_data(selectedUser)
 
 }, [selectedUser])
@@ -205,15 +232,14 @@ set_data(selectedUser)
               onChange("flat_no", e.target.value);
             }}
           >
-            <MenuItem value={"A-1"}>A-1</MenuItem>
-            <MenuItem value={"A-2"}>A-2</MenuItem>
-            <MenuItem value={"A-3"}>A-3</MenuItem>
-            <MenuItem value={"B-1"}>B-1</MenuItem>
-            <MenuItem value={"B-2"}>B-2</MenuItem>
-            <MenuItem value={"B-3"}>B-3</MenuItem>
-            <MenuItem value={"C-1"}>C-1</MenuItem>
-            <MenuItem value={"C-2"}>C-2</MenuItem>
-            <MenuItem value={"C-3"}>C-3</MenuItem>
+            <MenuItem value={data.flat_no}>{data.flat_no}</MenuItem>
+          {!findFlats("A-1")&&<MenuItem value={"A-1"}>A-1</MenuItem>} 
+           {!findFlats("A-2")&&<MenuItem value={"A-2"}>A-2</MenuItem>} 
+           {!findFlats("B-1")&&<MenuItem value={"B-1"}>B-1</MenuItem>} 
+           {!findFlats("B-2")&&<MenuItem value={"B-2"}>B-2</MenuItem>} 
+           {!findFlats("C-1")&&<MenuItem value={"C-1"}>C-1</MenuItem>} 
+           {!findFlats("C-2")&&<MenuItem value={"C-2"}>C-2</MenuItem>} 
+
           </Select>
         </FormControl>
 
@@ -311,3 +337,14 @@ set_data(selectedUser)
     
   );
 }
+
+
+
+const mapStateToProps = (state) => ({
+  
+  admin:state.user.admin
+});
+
+
+
+export default connect(mapStateToProps)(EditUser);

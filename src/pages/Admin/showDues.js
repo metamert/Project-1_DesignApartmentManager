@@ -3,7 +3,7 @@ import React ,{useEffect,useState}from "react";
 import {connect} from "react-redux"
 import { ToastContainer, toast } from "react-toastify";
 import axios from "axios"
- function Dues({dues,admin,update}) {
+ function Dues({dues,admin,update,cancel}) {
 
 
 
@@ -23,6 +23,7 @@ import axios from "axios"
       })
       toast.success("payment is done !")
       update()
+      cancel()
     } catch (error) {
       toast.error("error")
     }
