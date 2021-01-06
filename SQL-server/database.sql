@@ -62,7 +62,7 @@ CREATE TABLE dues(
   flat_no VARCHAR(255) NOT NULL,
 
   PRIMARY KEY (due_id),
-  FOREIGN KEY (user_id) REFERENCES users(user_id)
+  FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
 );
 
 
